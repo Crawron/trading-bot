@@ -1,0 +1,4 @@
+node_modules
+.env
+google-auth.json
+main-pm2.json

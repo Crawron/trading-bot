@@ -1,0 +1,25 @@
+{
+	"name": "eventbot",
+	"version": "1.0.0",
+	"main": "src/main.ts",
+	"devDependencies": {
+		"@types/node": "^15.6.0",
+		"@types/node-fetch": "^2.5.10",
+		"ts-node": "^9.1.1",
+		"typescript": "^4.2.4"
+	},
+	"scripts": {
+		"start": "nodemon src/main.ts"
+	},
+	"dependencies": {
+		"bufferutil": "^4.0.3",
+		"dotenv": "^10.0.0",
+		"eris": "^0.15.1",
+		"erlpack": "github:discord/erlpack",
+		"node-fetch": "^2.6.1",
+		"sheets-database": "^1.0.4",
+		"slasher": "link:/home/craw/Dev/fine",
+		"utf-8-validate": "^5.0.5",
+		"zlib-sync": "^0.1.7"
+	}
+}
