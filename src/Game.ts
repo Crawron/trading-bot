@@ -61,7 +61,7 @@ class Game {
 		return this.activeExchanges.some(
 			(e) =>
 				(e.dealer.id === player.id && e.dealerGive !== undefined) ||
-				(e.recipient.id === player.id && e.recipient !== undefined)
+				(e.recipient.id === player.id && e.recipientGive !== undefined)
 		)
 	}
 
