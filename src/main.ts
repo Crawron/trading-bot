@@ -55,7 +55,10 @@ botClient.on("messageCreate", async (msg) => {
 
 const sleep = async (ms: number) => new Promise((res) => setTimeout(res, ms))
 
-botClient.on("disconnect", () => logInfo("Disconnected...", LogColor.Red))
+botClient.on("disconnect", () => {
+	logInfo("Disconnected...", LogColor.Red)
+	process.exit()
+})
 botClient.on("error", logError())
 
 botClient.connect()
