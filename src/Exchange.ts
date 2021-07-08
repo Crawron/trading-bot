@@ -9,9 +9,9 @@ export type RawExchange = {
 	/** Player ID */
 	recipient: string
 	/** The dealer side is pending */
-	dealerPending: boolean
+	dealerDone: boolean
 	/** The recipient side is pending */
-	recipientPending: boolean
+	recipientDone: boolean
 	/** Hitlist items the dealer will give, comma separated */
 	dealerHitlist?: string
 	/** Hitlist items the recipient will give, comma separated */
@@ -34,11 +34,34 @@ export class Exchange {
 	recipientGive?: ExchangeSide
 
 	constructor(
+		public id: string,
 		public dealer: Player,
 		public recipient: Player,
 		public isGift: boolean,
 		public round: number
 	) {}
+
+	static fromRaw(
+		raw: RawExchange,
+		dealer: Player,
+		recipient: Player,
+		id: string
+	) {
+		const exch = new Exchange(id, dealer, recipient, raw.isGift, raw.round)
+		if (raw.dealerDone)
+			exch.dealerGives({
+				hitlist: raw.dealerHitlist?.split(",") ?? [],
+				tokens: raw.dealerTokens ?? 0,
+			})
+
+		if (raw.recipientDone)
+			exch.recipientGives({
+				hitlist: raw.recipientHitlist?.split(",") ?? [],
+				tokens: raw.recipientTokens ?? 0,
+			})
+
+		return exch
+	}
 
 	/** return true on success, string with reason on fail  */
 	dealerGives(side: ExchangeSide) {
@@ -47,7 +70,7 @@ export class Exchange {
 
 		this.dealerGive = side
 
-		return true
+		return this
 	}
 
 	/** return true on success, string with reason on fail */
@@ -57,7 +80,7 @@ export class Exchange {
 
 		this.recipientGive = side
 
-		return true
+		return this
 	}
 
 	get isCompletelyEmpty(): boolean {
@@ -114,8 +137,12 @@ export class Exchange {
 			isGift: this.isGift,
 			dealer: this.dealer.id,
 			recipient: this.recipient.id,
-			dealerPending: !!this.dealerGive,
-			recipientPending: !!this.recipientGive,
+			dealerDone: !!this.dealerGive,
+			recipientDone: !!this.recipientGive,
+			dealerHitlist: this.dealerGive?.hitlist.join(","),
+			recipientHitlist: this.recipientGive?.hitlist.join(","),
+			dealerTokens: this.dealerGive?.tokens,
+			recipientTokens: this.recipientGive?.tokens,
 			round: this.round,
 		}
 	}

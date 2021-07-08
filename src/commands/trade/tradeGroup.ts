@@ -1,5 +1,6 @@
 import { CommandGroup } from "slasher"
 import { Exchange } from "../../Exchange"
+import { partTradeCommand } from "./partTradeCommand"
 import { startTradeCommand } from "./startTradeCommand"
 
 export const ongoingTrades = new Map<
@@ -7,4 +8,8 @@ export const ongoingTrades = new Map<
 	Exchange & { pendingConfirm: string[]; pendingPart: boolean }
 >()
 
-export const tradeGroup = new CommandGroup("trade", startTradeCommand)
+export const tradeGroup = new CommandGroup(
+	"trade",
+	startTradeCommand,
+	partTradeCommand
+)

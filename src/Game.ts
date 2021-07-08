@@ -10,7 +10,7 @@ class Game {
 	players = new Map<string, Player>()
 	vars = new Map<string, string | number | boolean>()
 
-	activeExchanges: Exchange[] = []
+	activeExchanges: Map<string, Exchange> = new Map()
 	channels: RawChannel[] = []
 
 	get inProgress() {
@@ -38,17 +38,17 @@ class Game {
 	getPlayerIdName(...playerIds: string[]): string | undefined {
 		let names = []
 		for (const id of playerIds) names.push(this.getPlayer(id).name)
-		return names.join(", ") || undefined
+		return names.join(", ") || "No"
 	}
 
 	getAllExchangesInvolving(player: Player) {
-		return this.activeExchanges.filter(
+		return [...this.activeExchanges.values()].filter(
 			(e) => e.dealer.id === player.id || e.recipient.id === player.id
 		)
 	}
 
 	pendingTradeBetween(playerA: Player, playerB: Player) {
-		return this.activeExchanges
+		return [...this.activeExchanges.values()]
 			.filter((e) => !e.isGift)
 			.find(
 				(e) =>
@@ -58,7 +58,7 @@ class Game {
 	}
 
 	hasOutstanding(player: Player) {
-		return this.activeExchanges.some(
+		return [...this.activeExchanges.values()].some(
 			(e) =>
 				(e.dealer.id === player.id && e.dealerGive !== undefined) ||
 				(e.recipient.id === player.id && e.recipientGive !== undefined)
@@ -66,7 +66,7 @@ class Game {
 	}
 
 	findGiftFor(player: Player, from?: Player) {
-		return this.activeExchanges.find(
+		return [...this.activeExchanges.values()].find(
 			(e) =>
 				e.recipient.id === player.id &&
 				e.isGift &&
@@ -80,6 +80,7 @@ class Game {
 		dealerSide: ExchangeSide
 	): Exchange | string {
 		const exchange = new Exchange(
+			this.activeExchanges.size.toString(),
 			dealer,
 			recipient,
 			false,
@@ -88,10 +89,10 @@ class Game {
 
 		/* Set dealer's side. if issue, return reason. */
 		const result = exchange.dealerGives(dealerSide)
-		if (result !== true) return result
+		if (typeof result === "string") return result
 
 		/* no trade issue, add to exchanges queue */
-		this.activeExchanges.push(exchange)
+		this.activeExchanges.set(exchange.id, exchange)
 
 		/* Update db */
 		this.uploadExchanges()
@@ -113,6 +114,7 @@ class Game {
 			return "There's already a pending gift from you for this person."
 
 		const exchange = new Exchange(
+			this.activeExchanges.size.toString(),
 			dealer,
 			recipient,
 			true,
@@ -120,12 +122,12 @@ class Game {
 		)
 
 		const result = exchange.dealerGives(dealerSide)
-		if (result !== true) return result
+		if (typeof result === "string") return result
 
 		const recResult = exchange.recipientGives({ hitlist: [], tokens: 0 })
-		if (recResult !== true) return recResult
+		if (typeof recResult === "string") return recResult
 
-		this.activeExchanges.push(exchange)
+		this.activeExchanges.set(exchange.id, exchange)
 
 		this.uploadExchanges()
 
@@ -136,8 +138,8 @@ class Game {
 		db ??= await getDbConnection()
 		const exchTable = db.getTable("Exchanges").data as RawExchange[]
 
-		this.activeExchanges = []
-		for (const exch of exchTable) {
+		this.activeExchanges.clear()
+		for (const [i, exch] of exchTable.entries()) {
 			const dealer = this.players.get(exch.dealer)
 			const recipient = this.players.get(exch.recipient)
 
@@ -146,18 +148,19 @@ class Game {
 					"Error fetching active exch: Can't find either dealer or recipient"
 				)
 
-			this.activeExchanges.push(
-				new Exchange(dealer, recipient, exch.isGift, exch.round)
+			this.activeExchanges.set(
+				i.toString(),
+				Exchange.fromRaw(exch, dealer, recipient, i.toString())
 			)
 		}
 	}
 
-	private async uploadExchanges(db?: SheetDatabase) {
+	async uploadExchanges(db?: SheetDatabase) {
 		db ??= await getDbConnection()
 		const exchTable = db.getTable("Exchanges")
 
 		await exchTable.clear()
-		exchTable.insertMany(this.activeExchanges.map((e) => e.raw))
+		exchTable.insertMany([...this.activeExchanges.values()].map((e) => e.raw))
 
 		logInfo("Uploaded active exchanges")
 	}

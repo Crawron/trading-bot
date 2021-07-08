@@ -17,10 +17,15 @@ export const pendingCommand = new Command(
 				(e) => e.isComplete || e.dealer.id === int.member.id
 			)
 
-			const exchToString = (e: Exchange) =>
-				`- ${e.dealer.name} → ${e.recipient.name}${
-					e.isComplete || e.dealer.id === int.member.id ? "**\\***" : ""
+			const exchToString = (e: Exchange) => {
+				console.log(e.recipient, e.recipientGive)
+				return `- ${e.dealer.name} ↔ ${e.recipient.name}${
+					(e.recipient.id === int.member.id && e.recipientGive) ||
+					e.dealer.id === int.member.id
+						? "**\\***"
+						: ""
 				}`
+			}
 
 			let exchangesList = ""
 
