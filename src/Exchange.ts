@@ -110,24 +110,24 @@ export class Exchange {
 
 		return {
 			dealer: {
-				hitlist: dealerGive?.hitlist
-					? arrayDiff(dealer.hitList, dealerGive.hitlist).concat(
-							recipientGive?.hitlist ?? []
-					  )
-					: dealer.hitList,
-				tokens: dealerGive?.tokens
-					? dealer.tokens - dealerGive.tokens + (recipientGive?.tokens ?? 0)
-					: dealer.tokens,
+				hitlist: arrayDiff(
+					dealer.hitList, //
+					dealerGive?.hitlist ?? []
+				).concat(recipientGive?.hitlist ?? []),
+				tokens:
+					dealer.tokens -
+					(dealerGive?.tokens ?? 0) +
+					(recipientGive?.tokens ?? 0),
 			},
 			recipient: {
-				hitlist: recipientGive?.hitlist
-					? arrayDiff(recipient.hitList, recipientGive.hitlist).concat(
-							dealerGive?.hitlist ?? []
-					  )
-					: recipient.hitList,
-				tokens: recipientGive?.tokens
-					? recipient.tokens - recipientGive.tokens + (dealerGive?.tokens ?? 0)
-					: recipient.tokens,
+				hitlist: arrayDiff(
+					recipient.hitList,
+					recipientGive?.hitlist ?? []
+				).concat(dealerGive?.hitlist ?? []),
+				tokens:
+					recipient.tokens -
+					(recipientGive?.tokens ?? 0) +
+					(dealerGive?.tokens ?? 0),
 			},
 		}
 	}

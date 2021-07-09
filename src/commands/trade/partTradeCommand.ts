@@ -109,6 +109,8 @@ export const partTradeCommand = new Command(
 					text: `${trade.dealer.name} must /trade confirm, or either of you can /trade cancel`,
 				},
 			})
+
+			game.uploadExchanges()
 		},
 	}
 )

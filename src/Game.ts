@@ -35,6 +35,11 @@ class Game {
 		// logInfo("Fetched Game Data")
 	}
 
+	async uploadData() {
+		this.uploadPlayers()
+		this.uploadExchanges()
+	}
+
 	getPlayerIdName(...playerIds: string[]): string | undefined {
 		let names = []
 		for (const id of playerIds) names.push(this.getPlayer(id).name)
@@ -93,9 +98,6 @@ class Game {
 
 		/* no trade issue, add to exchanges queue */
 		this.activeExchanges.set(exchange.id, exchange)
-
-		/* Update db */
-		this.uploadExchanges()
 
 		return exchange
 	}
@@ -161,8 +163,6 @@ class Game {
 
 		await exchTable.clear()
 		exchTable.insertMany([...this.activeExchanges.values()].map((e) => e.raw))
-
-		logInfo("Uploaded active exchanges")
 	}
 
 	private async fetchVars(db?: SheetDatabase) {

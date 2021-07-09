@@ -2,13 +2,10 @@ import * as Eris from "eris"
 import { game } from "../../Game"
 
 /** Finds the recipient player, given a pair channel id and one players's id */
-export async function solveTriangle(
-	playerId: string,
-	channel: Eris.TextChannel
-) {
+export function solveTriangle(playerId: string, channel: Eris.TextChannel) {
 	if (channel.parentID === process.env.TRADEIGNORECATEGORYID!) return
 
-	const otherPlayers = await playersInChannel(channel)
+	const otherPlayers = playersInChannel(channel)
 	if (otherPlayers.length !== 2) return
 
 	const [playerA, playerB] = otherPlayers
@@ -16,7 +13,7 @@ export async function solveTriangle(
 	return playerId === playerA.id ? playerB! : playerA
 }
 
-async function playersInChannel(channel: Eris.TextChannel) {
+function playersInChannel(channel: Eris.TextChannel) {
 	const players = channel.guild.members
 		.filter(
 			(m) =>

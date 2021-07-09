@@ -78,5 +78,7 @@ export const startTradeCommand = new Command("start", "Initiate a new trade.", {
 		int.followUp(
 			`<@${recipient.id}>, **${dealer.name}** has initiated a trade with you, respond with \`/trade part\` or \`/trade cancel\`.`
 		)
+
+		game.uploadExchanges()
 	},
 })

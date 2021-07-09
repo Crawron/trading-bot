@@ -73,13 +73,13 @@ export class Player {
 		else return this.def.hitList.sort()
 	}
 
-	clearHitlist() {
-		this.def.hitList = []
+	set hitList(hitlist: string[]) {
+		this.def.hitList = hitlist
 	}
 
 	/** Returns whether successful */
 	removeHitList(ids: string[]): boolean {
-		const check = checkSubset(ids, this.def.hitList)
+		const check = checkSubset(ids, this.hitList)
 		if (!check) return false
 
 		for (const id in ids) {
@@ -94,11 +94,15 @@ export class Player {
 		this.def.hitList.push(...ids)
 	}
 
+	clearHitlist() {
+		this.def.hitList = []
+	}
+
 	canGive(trade: ExchangeSide, checkTradeCount = true) {
 		if (checkTradeCount && this.def.remainingTrades < 1)
 			return `${this.name} has ran out of trades`
 
-		const check = checkSubset(trade.hitlist, this.def.hitList)
+		const check = checkSubset(trade.hitlist, this.hitList)
 		if (!check)
 			return `\`${
 				this.name
@@ -112,14 +116,22 @@ export class Player {
 	}
 
 	get raw(): RawPlayer {
-		const { id, name: displayName, dead, def, remainingTrades } = this
-		const { tokenCount, vp, hitList } = def
+		const {
+			id,
+			name: displayName,
+			dead,
+			def,
+			remainingTrades,
+			tokens,
+			hitList,
+			vp,
+		} = this
 
 		return {
 			id,
 			name: displayName,
 			dead,
-			tokenCount,
+			tokenCount: tokens,
 			vp,
 			remainingTrades,
 			hitList: hitList.join(","),
