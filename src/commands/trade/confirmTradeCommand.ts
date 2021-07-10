@@ -7,14 +7,15 @@ export const confirmTradeCommand = new Command(
 	"Confirm a pending trade",
 	{
 		action: async (int) => {
-			if (!game.inProgress) return int.reply("The game hasn't started yet")
+			if (!game.inProgress)
+				return int.reply("The game hasn't started yet", true)
 
 			if (!game.isPlayer(int.member.id))
-				return int.reply("Only players can use this")
+				return int.reply("Only players can use this", true)
 			const recipient = solveTriangle(int.member.id, int.channel)
 
 			if (!recipient)
-				return int.reply("You can only use this command in pair chats")
+				return int.reply("You can only use this command in pair chats", true)
 
 			const dealer = game.getPlayer(int.member.id)
 
@@ -35,10 +36,11 @@ export const confirmTradeCommand = new Command(
 				)
 
 			const dealerCheck = trade.dealer.canGive(trade.dealerGive!)
-			if (typeof dealerCheck === "string") return int.reply(dealerCheck)
+			if (typeof dealerCheck === "string") return int.reply(dealerCheck, true)
 
 			const recipientCheck = trade.recipient.canGive(trade.recipientGive!)
-			if (typeof recipientCheck === "string") return int.reply(recipientCheck)
+			if (typeof recipientCheck === "string")
+				return int.reply(recipientCheck, true)
 
 			const { tradeResult } = trade
 
@@ -63,8 +65,8 @@ export const confirmTradeCommand = new Command(
 					"I can't believe someone actually did this. You have actually wasted a trade and we will *not* give it back to you. This is the price of comedy."
 				)
 
-			game.uploadExchanges()
-			game.uploadPlayers()
+			await game.uploadExchanges()
+			await game.uploadPlayers()
 		},
 	}
 )
