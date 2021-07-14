@@ -12,9 +12,7 @@ export const addPlayerCommand = new Command(
 		action: async (int) => {
 			await int.defer()
 
-			const playerMember = (await int.parsedOptions()).get(
-				"player"
-			) as Eris.Member
+			const playerMember = await int.option<Eris.Member>("player")
 
 			const existingPlayer = [...game.players.values()].find(
 				(p) => p.id === playerMember.id

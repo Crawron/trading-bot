@@ -1,5 +1,8 @@
 import { Command } from "slasher"
+import { getTradeEmbed } from "../../embeds"
 import { game } from "../../Game"
+import { LogColor, logInfo } from "../../logging"
+import { colors } from "../../strings"
 import { solveTriangle } from "./common"
 
 export const confirmTradeCommand = new Command(
@@ -27,12 +30,14 @@ export const confirmTradeCommand = new Command(
 
 			if (!trade.recipientGive)
 				return int.reply(
-					`${trade.recipient.name} hasn't decided their part, they must \`/trade part\``
+					`${trade.recipient.name} hasn't decided their part, they must \`/trade part\``,
+					true
 				)
 
 			if (trade.dealer.id !== dealer.id)
 				return int.reply(
-					`You aren't the dealer of this trade. You must wait for **${dealer.name}**`
+					`You aren't the dealer of this trade. You must wait for **${trade.dealer.name}**`,
+					true
 				)
 
 			const dealerCheck = trade.dealer.canGive(trade.dealerGive!)
@@ -59,6 +64,11 @@ export const confirmTradeCommand = new Command(
 			game.activeExchanges.delete(trade.id)
 
 			int.reply("Trade complete! Thank you ♥")
+
+			game.logGameInfo({
+				content: `A trade between ${trade.dealer.name} and ${trade.recipient.name} has been completed. <#${int.channel.id}>`,
+				embed: getTradeEmbed(trade, true),
+			})
 
 			if (trade.isCompletelyEmpty)
 				int.followUp(

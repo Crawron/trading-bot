@@ -43,8 +43,6 @@
 - Dead can trade/gift with the living, and vice versa
 - "I dont want players to be able to send gifts if they have any given to them that they haven't accepted or declined"
 
--
-
 ## Models
 
 Game

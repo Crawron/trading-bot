@@ -68,7 +68,7 @@ export function playerInfoEmbed(player: Player): WebhookMessageEmbed {
 
 	const hitlist = player.dead
 		? "🩸 _You're wounded! Your hit list will remain empty for the rest of the game. You can still recieve hit list items from other players, but they will be immediately deleted._"
-		: listIndex(player.hitList.map(game.getPlayerNameOfId)) || `_Empty_`
+		: listIndex(player.hitList.map(game.getPlayerNameFromId)) || `_Empty_`
 
 	const embed = new RichEmbed()
 		.author(name, member.user.avatarURL)
@@ -80,18 +80,22 @@ export function playerInfoEmbed(player: Player): WebhookMessageEmbed {
 		.field("Oblivion", `**${tokens}** ${emoji.oblivion.repeat(tokens)}`, true)
 		.field("Trades Left", `${remainingTrades}`, true)
 		.field("Hit List", hitlist)
+		.image("https://via.placeholder.com/360x1/2f3136/2f3136")
 
 	if (getMemberColor(member)) embed.color(getMemberColor(member))
 
 	return embed.raw
 }
 
-export function getTradeEmbed(trade: Exchange): WebhookMessageEmbed {
+export function getTradeEmbed(
+	trade: Exchange,
+	finished = false
+): WebhookMessageEmbed {
 	const { dealerGive, recipientGive, dealer, recipient } = trade
 
 	const dealerPart = dealerGive
 		? `**Hit List Items:** ${
-				game.getPlayerIdNameList(dealerGive.hitlist) || "*None*"
+				game.getPlayerNamesListFromIds(dealerGive.hitlist) || "*None*"
 		  }\n**Oblivion: ${dealerGive.tokens}** ${emoji.oblivion.repeat(
 				dealerGive.tokens
 		  )}`
@@ -99,7 +103,7 @@ export function getTradeEmbed(trade: Exchange): WebhookMessageEmbed {
 
 	const recipientPart = recipientGive
 		? `**Hit List Items:** ${
-				game.getPlayerIdNameList(recipientGive.hitlist) || "*None*"
+				game.getPlayerNamesListFromIds(recipientGive.hitlist) || "*None*"
 		  }\n**Oblivion: ${recipientGive.tokens}** ${emoji.oblivion.repeat(
 				recipientGive.tokens
 		  )}`
@@ -109,7 +113,10 @@ export function getTradeEmbed(trade: Exchange): WebhookMessageEmbed {
 		.title(`Trade between **${dealer.name} ↔ ${recipient.name}**`)
 		.field(`${dealer.name} Gives`, dealerPart, true)
 		.field(`${recipient.name} Gives`, recipientPart, true)
+		.image("https://via.placeholder.com/360x1/2f3136/2f3136")
 		.color(colors.digory)
+
+	if (finished) return embed.raw
 
 	if (trade.isComplete) {
 		embed.field(
@@ -118,12 +125,33 @@ export function getTradeEmbed(trade: Exchange): WebhookMessageEmbed {
 		)
 	} else {
 		embed.field(
-			`${trade.recipient.name}'s Part Pending!`,
+			`${trade.recipient.name}'s Part Pending`,
 			`**${trade.recipient.name}** is missing their part of the trade. They may \`/trade part\``
 		)
 	}
 
 	return embed.raw
+}
+
+export function getGiftEmbed(gift: Exchange): WebhookMessageEmbed {
+	return new RichEmbed()
+		.title(`Gift **${gift.dealer.name} ➡ ${gift.recipient.name}**`)
+		.description(`*${gift.recipient.name} will be given the following items*`)
+		.field(
+			"Hit List Entries",
+			gift
+				.dealerGive!.hitlist.map((e) => game.getPlayerNameFromId(e))
+				.join("\n") || `_None_`
+		)
+		.field(
+			"Oblivion",
+			`**${gift.dealerGive?.tokens}** ${emoji.oblivion.repeat(
+				gift.dealerGive?.tokens ?? 0
+			)}`
+		)
+		.image("https://via.placeholder.com/360x1/2f3136/2f3136")
+		.thumbnail(gift.recipient.member.avatarURL)
+		.color(getMemberColor(gift.dealer.member)).raw
 }
 
 export function getMemberColor(member: Eris.Member): number {

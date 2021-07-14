@@ -7,6 +7,7 @@ export const inventoryCommand = new Command(
 	"inventory",
 	"Displays your Hit List and oblivion",
 	{
+		permissions: { roles: [process.env.PLAYERROLEID!] },
 		action: async (int) => {
 			if (!game.isPlayer(int.member.id)) return int.reply(errors.playerOnly)
 

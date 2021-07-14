@@ -7,6 +7,7 @@ import { startTradeCommand } from "./startTradeCommand"
 
 export const tradeGroup = new CommandGroup(
 	"trade",
+	{ roles: [process.env.PLAYERROLEID!] },
 	startTradeCommand,
 	partTradeCommand,
 	confirmTradeCommand,

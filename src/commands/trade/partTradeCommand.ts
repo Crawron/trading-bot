@@ -65,14 +65,25 @@ export const partTradeCommand = new Command(
 
 			const hitlistStr = await int.option("hitlist", "")
 
-			const hitlist =
-				hitlistStr
-					.split(",")
-					.map((e) => e.trim())
-					.map((e) => recipient.hitList[parseInt(e) - 1]) ?? []
+			const hitlistIndices = hitlistStr
+				? hitlistStr.split(",").map((e) => parseInt(e.trim()) - 1)
+				: []
 
-			const tokens =
-				((await int.parsedOptions()).get("oblivion") as number | undefined) ?? 0
+			if (hitlistIndices.some((i) => isNaN(i)))
+				return int.reply(
+					"Write Hit List items by their position on your `/inventory`. (ex: `hitlist: 1,3`)",
+					true
+				)
+
+			if (hitlistIndices.some((i) => i >= recipient.hitList.length || i < 0))
+				return int.reply(
+					"You've given a Hit List item that's not your list",
+					true
+				)
+
+			const hitlist = hitlistIndices.map((i) => recipient.hitList[i])
+
+			const tokens = await int.option("oblivion", 0)
 
 			const recipientCanGive = recipient.canGive({ hitlist, tokens })
 			if (recipientCanGive !== true) return int.reply(recipientCanGive, true)

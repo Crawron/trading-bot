@@ -6,7 +6,7 @@ export const databaseCommand = new Command("database", "Debug command", {
 	action: async (int) => {
 		int.defer()
 
-		const table = (await int.parsedOptions()).get("table") as string
+		const table = await int.option<string>("table")
 		const db = await getDbConnection()
 		const data = db.getTable(table).data
 

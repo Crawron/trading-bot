@@ -12,6 +12,7 @@ import { hostGroup } from "./commands/host/hostGroup"
 import "dotenv/config"
 import { pendingCommand } from "./commands/pendingCommand"
 import { rollCommand } from "./commands/rollCommand"
+import { giftGroup } from "./commands/gift/giftGroup"
 
 export const botClient = new Client(process.env.TOKEN!, {
 	restMode: true,
@@ -20,7 +21,7 @@ export const botClient = new Client(process.env.TOKEN!, {
 })
 
 botClient.on("ready", async () => {
-	const command = new CommandHandler(botClient, {
+	new CommandHandler(botClient, {
 		commands: [
 			tradeGroup,
 			debugGroup,
@@ -28,6 +29,7 @@ botClient.on("ready", async () => {
 			pendingCommand,
 			hostGroup,
 			rollCommand,
+			giftGroup,
 		],
 	})
 

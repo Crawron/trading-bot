@@ -4,6 +4,7 @@ import { getTradeEmbed } from "../../embeds"
 import { game } from "../../Game"
 import { Player } from "../../Player"
 import { errors } from "../../strings"
+import { checkGameAndPlayer } from "../common"
 import { solveTriangle } from "./common"
 
 export const startTradeCommand = new Command("start", "Initiate a new trade.", {
@@ -16,8 +17,7 @@ export const startTradeCommand = new Command("start", "Initiate a new trade.", {
 	],
 
 	action: async (int) => {
-		if (!game.inProgress) return int.reply(errors.gameStart, true)
-		if (!game.isPlayer(int.member.id)) return int.reply(errors.playerOnly, true)
+		if (!checkGameAndPlayer(int)) return
 
 		const dealer = game.getPlayer(int.member.id)
 		const recipient = solveTriangle(dealer.id, int.channel)
@@ -36,18 +36,20 @@ export const startTradeCommand = new Command("start", "Initiate a new trade.", {
 				true
 			)
 
-		const hitlistStr = (await int.parsedOptions()).get("hitlist") as
-			| string
-			| undefined
+		const hitlistStr = await int.option("hitlist", "")
 
-		const hitlist =
-			hitlistStr
-				?.split(",")
-				.map((e) => e.trim())
-				.map((e) => dealer.hitList[parseInt(e) - 1]) ?? []
+		const hitlistIndices = hitlistStr
+			? hitlistStr.split(",").map((e) => parseInt(e.trim()) - 1)
+			: []
 
-		const tokens =
-			((await int.parsedOptions()).get("tokens") as number | undefined) ?? 0
+		if (hitlistIndices.some(isNaN)) return int.reply(errors.hitlistIndex, true)
+
+		if (hitlistIndices.some((i) => i >= dealer.hitList.length || i < 0))
+			return int.reply(errors.outOfList, true)
+
+		const hitlist = hitlistIndices.map((i) => dealer.hitList[i])
+
+		const tokens = await int.option("oblivion", 0)
 
 		const dealerCanGive = dealer.canGive({ hitlist, tokens })
 		if (dealerCanGive !== true) return int.reply(dealerCanGive, true)

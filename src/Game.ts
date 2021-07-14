@@ -3,6 +3,7 @@ import SheetDatabase from "sheets-database"
 import { getDbConnection } from "./database"
 import { Exchange, ExchangeSide, RawExchange } from "./Exchange"
 import { logInfo } from "./logging"
+import { botClient } from "./main"
 import { Player, RawPlayer } from "./Player"
 import { RawChannel } from "./types"
 
@@ -15,7 +16,7 @@ class Game {
 
 	constructor() {
 		this.getPlayer = this.getPlayer.bind(this)
-		this.getPlayerNameOfId = this.getPlayerNameOfId.bind(this)
+		this.getPlayerNameFromId = this.getPlayerNameFromId.bind(this)
 	}
 
 	get inProgress() {
@@ -45,13 +46,24 @@ class Game {
 		this.uploadExchanges()
 	}
 
-	getPlayerIdNameList(playerIds: string[]): string {
+	async logGameInfo(content: Eris.MessageContent) {
+		const channel = (botClient.guilds
+			.get(process.env.GUILDID!)
+			?.channels.get(process.env.GAMELOGCHANNEL!) ??
+			(await botClient.getRESTChannel(
+				process.env.GAMELOGCHANNEL!
+			))) as Eris.TextChannel
+
+		channel.createMessage(content)
+	}
+
+	getPlayerNamesListFromIds(playerIds: string[]): string {
 		let names = []
 		for (const id of playerIds) names.push(this.getPlayer(id).name)
 		return names.join(", ") || "No"
 	}
 
-	getPlayerNameOfId(id: string) {
+	getPlayerNameFromId(id: string) {
 		return this.getPlayer(id).name
 	}
 
