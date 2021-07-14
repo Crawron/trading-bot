@@ -44,3 +44,7 @@ export function arrayDiff<T>([...arrA]: T[], arrB: T[]): T[] {
 
 	return arrA
 }
+
+export function listIndex(arr: string[]): string {
+	return arr.map((e, i) => `\`${i + 1}\` ${e}`).join("\n")
+}

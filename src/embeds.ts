@@ -2,80 +2,141 @@ import Eris = require("eris")
 import { WebhookMessageEmbed } from "slasher/src/ApiTypes"
 import { Exchange } from "./Exchange"
 import { game } from "./Game"
+import { listIndex } from "./helpers"
 import { Player } from "./Player"
+import { colors, emoji } from "./strings"
 
-export function playerInfoEmbed(player: Player): WebhookMessageEmbed {
-	const { id, name, tokens, member, vp, remainingTrades, dead, hitList } =
-		player
+class RichEmbed {
+	raw: WebhookMessageEmbed
 
-	const embed: WebhookMessageEmbed = {
-		type: "rich",
-		title: name,
-		thumbnail: { url: member.user.avatarURL },
-		fields: [
-			{ name: "VPs", value: `**${vp - tokens}** _(${vp} -${tokens}T)_` },
-			{ name: "Remaining Trades", value: remainingTrades.toString() },
-			{ name: "Status", value: dead ? "*Dead*" : "*Alive*" },
-			{
-				name: "HitList",
-				value:
-					hitList
-						.map((e, i) => `**${i + 1}.** ${game.getPlayer(e)?.name ?? e}`)
-						.join("\n") || "*Empty*",
-			},
-		],
-		footer: { text: `ID ${id}` },
+	constructor(embed: Omit<WebhookMessageEmbed, "type"> = {}) {
+		const { fields, ...theRest } = embed
+		this.raw = { type: "rich", fields: fields ?? [], ...theRest }
 	}
 
-	return embed
+	author(name: string, iconUrl?: string, authorUrl?: string) {
+		this.raw.author = { name, icon_url: iconUrl, url: authorUrl }
+		return this
+	}
+
+	title(title: string) {
+		this.raw.title = title
+		return this
+	}
+
+	url(url: string) {
+		this.raw.url = url
+		return this
+	}
+
+	description(description: string) {
+		this.raw.description = description
+		return this
+	}
+
+	field(name: string, value: string, inline = false) {
+		if (!name) throw new Error("`name` empty")
+		if (!value) throw new Error("`value` empty")
+
+		this.raw.fields = this.raw.fields!.concat([{ name, value, inline }])
+		return this
+	}
+
+	image(url: string) {
+		this.raw.image = { url }
+		return this
+	}
+
+	thumbnail(url: string) {
+		this.raw.thumbnail = { url }
+		return this
+	}
+
+	footer(text: string, icon?: string) {
+		this.raw.footer = { text, icon_url: icon }
+		return this
+	}
+
+	color(color: number) {
+		this.raw.color = color
+		return this
+	}
+}
+
+export function playerInfoEmbed(player: Player): WebhookMessageEmbed {
+	const { name, tokens, member, vp, remainingTrades, dead } = player
+
+	const hitlist = player.dead
+		? "🩸 _You're wounded! Your hit list will remain empty for the rest of the game. You can still recieve hit list items from other players, but they will be immediately deleted._"
+		: listIndex(player.hitList.map(game.getPlayerNameOfId)) || `_Empty_`
+
+	const embed = new RichEmbed()
+		.author(name, member.user.avatarURL)
+		.field(
+			"Prestige",
+			`**${vp - tokens}** (${vp} - ${tokens} ${emoji.oblivion})`,
+			true
+		)
+		.field("Oblivion", `**${tokens}** ${emoji.oblivion.repeat(tokens)}`, true)
+		.field("Trades Left", `${remainingTrades}`, true)
+		.field("Hit List", hitlist)
+
+	if (getMemberColor(member)) embed.color(getMemberColor(member))
+
+	return embed.raw
 }
 
 export function getTradeEmbed(trade: Exchange): WebhookMessageEmbed {
-	const recipientPart =
-		trade.recipientGive &&
-		`**Hit list items** ${game.getPlayerIdName(
-			...(trade.recipientGive?.hitlist ?? [])
-		)}\n**${
-			trade.recipientGive?.tokens || "No"
-		} Tokens** ${"<:LunarCoin:623550952028241921>".repeat(
-			trade.recipientGive?.tokens ?? 0
-		)}`
+	const { dealerGive, recipientGive, dealer, recipient } = trade
 
-	return {
-		type: `rich`,
-		title: `Trade between **${trade.dealer.name}** **\\↔** **${trade.recipient.name}**`,
-		color: 14130143,
-		fields: [
-			{
-				name: `${trade.dealer.name} gives`,
-				value: `**Hit list items** ${game.getPlayerIdName(
-					...(trade.dealerGive?.hitlist ?? [])
-				)}\n**${
-					trade.dealerGive?.tokens || "No"
-				} Tokens** ${"<:LunarCoin:623550952028241921>".repeat(
-					trade.dealerGive?.tokens ?? 0
-				)}`,
-				inline: true,
-			},
-			{
-				name: `${trade.recipient.name} gives`,
-				value: recipientPart ?? "*Pending...*",
-				inline: true,
-			},
-		].concat(
-			(trade.isComplete && [
-				{
-					name: "Trade Ready!",
-					value: `This trade is complete, **${trade.dealer.name}** must confirm with \`/trade confirm\`. Either side can \`/trade cancel\``,
-					inline: false,
-				},
-			]) || [
-				{
-					name: "Recipient Pending",
-					value: `**${trade.recipient.name}** is missing their part of the trade. They must either \`/trade part\` or \`/trade cancel\``,
-					inline: false,
-				},
-			]
-		),
+	const dealerPart = dealerGive
+		? `**Hit List Items:** ${
+				game.getPlayerIdNameList(dealerGive.hitlist) || "*None*"
+		  }\n**Oblivion: ${dealerGive.tokens}** ${emoji.oblivion.repeat(
+				dealerGive.tokens
+		  )}`
+		: "*Pending...*"
+
+	const recipientPart = recipientGive
+		? `**Hit List Items:** ${
+				game.getPlayerIdNameList(recipientGive.hitlist) || "*None*"
+		  }\n**Oblivion: ${recipientGive.tokens}** ${emoji.oblivion.repeat(
+				recipientGive.tokens
+		  )}`
+		: "*Pending...*"
+
+	const embed = new RichEmbed()
+		.title(`Trade between **${dealer.name} ↔ ${recipient.name}**`)
+		.field(`${dealer.name} Gives`, dealerPart, true)
+		.field(`${recipient.name} Gives`, recipientPart, true)
+		.color(colors.digory)
+
+	if (trade.isComplete) {
+		embed.field(
+			`${trade.dealer.name}'s Confirmation Pending!`,
+			`**${trade.dealer.name}** must confirm with \`/trade confirm\`. Or either side can \`/trade cancel\``
+		)
+	} else {
+		embed.field(
+			`${trade.recipient.name}'s Part Pending!`,
+			`**${trade.recipient.name}** is missing their part of the trade. They may \`/trade part\``
+		)
 	}
+
+	return embed.raw
+}
+
+export function getMemberColor(member: Eris.Member): number {
+	const colorRoles = member.roles
+		.map((rid) => member.guild.roles.get(rid))
+		.filter((r): r is Eris.Role => r !== undefined)
+		.filter((r) => r.color)
+
+	if (colorRoles.length < 1) return 0
+
+	const highestColorRole = colorRoles.reduce((a, b) =>
+		a.position > b.position ? a : b
+	)
+
+	return highestColorRole.color
 }

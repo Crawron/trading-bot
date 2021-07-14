@@ -6,7 +6,7 @@ import { game } from "./Game"
 import { LogColor, logError, logInfo } from "./logging"
 import { tradeGroup } from "./commands/trade/tradeGroup"
 import { debugGroup } from "./commands/debug/debugGroup"
-import { hitlistCommand } from "./commands/hitlistCommand"
+import { inventoryCommand } from "./commands/inventoryCommand"
 import { hostGroup } from "./commands/host/hostGroup"
 
 import "dotenv/config"
@@ -24,7 +24,7 @@ botClient.on("ready", async () => {
 		commands: [
 			tradeGroup,
 			debugGroup,
-			hitlistCommand,
+			inventoryCommand,
 			pendingCommand,
 			hostGroup,
 			rollCommand,

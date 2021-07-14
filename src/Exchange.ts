@@ -12,13 +12,13 @@ export type RawExchange = {
 	dealerDone: boolean
 	/** The recipient side is pending */
 	recipientDone: boolean
-	/** Hitlist items the dealer will give, comma separated */
+	/** Hit List items the dealer will give, comma separated */
 	dealerHitlist?: string
-	/** Hitlist items the recipient will give, comma separated */
+	/** Hit List items the recipient will give, comma separated */
 	recipientHitlist?: string
-	/** Tokens the dealer will give */
+	/** Oblivion the dealer will give */
 	dealerTokens?: number
-	/** Tokens the recipient will give */
+	/** Oblivion the recipient will give */
 	recipientTokens?: number
 	/** Round */
 	round: number

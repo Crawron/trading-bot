@@ -32,7 +32,7 @@ export const confirmTradeCommand = new Command(
 
 			if (trade.dealer.id !== dealer.id)
 				return int.reply(
-					`You aren't the dealer of this trade. You must wait for `
+					`You aren't the dealer of this trade. You must wait for **${dealer.name}**`
 				)
 
 			const dealerCheck = trade.dealer.canGive(trade.dealerGive!)

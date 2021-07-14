@@ -6,7 +6,7 @@ Words appended with a `ᴳ` have an entry in this glosaryᴳ. It will only appea
 
 A participant. You know what a player is but here's what they _have_:
 
-- A Hit Listᴳ and Anti-Tokensᴳ, making their **inventory**
+- A Hit Listᴳ and Oblivionᴳ, making their **inventory**
 - Victory points, which are substracted by the number of Anti-Tokens in inventory
 
 A player's win condition is to have **6** victory points by the end of the game.

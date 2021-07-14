@@ -1,22 +1,36 @@
 import { Command } from "slasher"
-import { ongoingTrades } from "./tradeGroup"
+import { getTradeEmbed } from "../../embeds"
+import { game } from "../../Game"
+import { solveTriangle } from "./common"
 
 export const cancelTradeCommand = new Command(
 	"cancel",
-	"Cancel an ongoing trade",
+	"Cancel a pending trade with this player",
 	{
 		action: async (int) => {
-			const trade = ongoingTrades.get(int.channel.id)
+			if (!game.inProgress)
+				return int.reply("The game has not started yet", true)
+			if (!game.isPlayer(int.member.id))
+				return int.reply("Only players may use this command", true)
 
-			if (!trade) {
-				int.reply(
-					"There's no ongoing trade in this channel. Use `/trade cancel` to cancel it"
-				)
-				return
-			}
+			const playerA = game.getPlayer(int.member.id)
+			const playerB = solveTriangle(playerA.id, int.channel)
 
-			ongoingTrades.delete(int.channel.id)
-			int.reply("Trade has ben cancelled!")
+			if (!playerB)
+				return int.reply("You can only use this command in a pair chat.", true)
+
+			const trade = game.pendingTradeBetween(playerA, playerB)
+
+			if (!trade)
+				return int.reply("There are no pending trades between you two", true)
+
+			game.activeExchanges.delete(trade.id)
+
+			int.reply(
+				`Your trade has been cancelled. ${trade.dealer.member.mention} ${trade.recipient.member.mention}`
+			)
+
+			game.uploadExchanges()
 		},
 	}
 )

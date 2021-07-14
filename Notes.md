@@ -70,6 +70,6 @@ Trade (includes gifts)
 - isGift
 - Dealer (Player ids)
 - Recipient (Player ids)
-- Giving (hitlist and tokens)
-- Receiving (hitlist and tokens)
+- Giving (hit list and tokens)
+- Receiving (hit list and tokens)
 - Round

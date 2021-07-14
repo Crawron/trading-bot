@@ -13,6 +13,11 @@ class Game {
 	activeExchanges: Map<string, Exchange> = new Map()
 	channels: RawChannel[] = []
 
+	constructor() {
+		this.getPlayer = this.getPlayer.bind(this)
+		this.getPlayerNameOfId = this.getPlayerNameOfId.bind(this)
+	}
+
 	get inProgress() {
 		return (this.vars.get("round") ?? 0) > 0
 	}
@@ -40,10 +45,14 @@ class Game {
 		this.uploadExchanges()
 	}
 
-	getPlayerIdName(...playerIds: string[]): string | undefined {
+	getPlayerIdNameList(playerIds: string[]): string {
 		let names = []
 		for (const id of playerIds) names.push(this.getPlayer(id).name)
 		return names.join(", ") || "No"
+	}
+
+	getPlayerNameOfId(id: string) {
+		return this.getPlayer(id).name
 	}
 
 	getAllExchangesInvolving(player: Player) {

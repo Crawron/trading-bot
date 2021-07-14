@@ -1,4 +1,5 @@
 import { CommandGroup } from "slasher"
+import { cancelTradeCommand } from "./cancelTradeCommand"
 import { confirmTradeCommand } from "./confirmTradeCommand"
 import { partTradeCommand } from "./partTradeCommand"
 import { pendingTradeCommand } from "./pendingTradeCommand"
@@ -9,5 +10,6 @@ export const tradeGroup = new CommandGroup(
 	startTradeCommand,
 	partTradeCommand,
 	confirmTradeCommand,
-	pendingTradeCommand
+	pendingTradeCommand,
+	cancelTradeCommand
 )

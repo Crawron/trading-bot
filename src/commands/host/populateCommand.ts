@@ -5,7 +5,7 @@ import { logInfo } from "../../logging"
 
 export const populateCommand = new Command(
 	"populate-hitlists",
-	"(Clear and) Populate HitLists for all players",
+	"(Clear and) Populate Hit Lists for all players",
 	{
 		action: async (int) => {
 			int.defer()

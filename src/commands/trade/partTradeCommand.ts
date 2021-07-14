@@ -12,9 +12,9 @@ export const partTradeCommand = new Command(
 		options: [
 			stringOpt(
 				"hitlist",
-				"Hitlist items to trade, comma separated. **Use the list index from /hitlist** (ex. hitlist: 1,2,6)"
+				"Hitlist items to trade, comma separated. **Use the list index from /inventory** (ex. hitlist: 1,2,6)"
 			),
-			integerOpt("tokens", "tokens"),
+			integerOpt("oblivion", "oblivion"),
 		],
 		action: async (int) => {
 			if (!game.inProgress) return int.reply("Wait until the game starts", true)
@@ -24,7 +24,7 @@ export const partTradeCommand = new Command(
 
 			const recipient = game.getPlayer(int.member.id)
 
-			const dealer = await solveTriangle(int.member.id, int.channel)
+			const dealer = solveTriangle(int.member.id, int.channel)
 			if (!dealer)
 				return int.reply(
 					"You must call this command in a pair channel in order to trade with the other player",
@@ -63,18 +63,16 @@ export const partTradeCommand = new Command(
 					true
 				)
 
-			const hitlistStr = (await int.parsedOptions()).get("hitlist") as
-				| string
-				| undefined
+			const hitlistStr = await int.option("hitlist", "")
 
 			const hitlist =
 				hitlistStr
-					?.split(",")
+					.split(",")
 					.map((e) => e.trim())
 					.map((e) => recipient.hitList[parseInt(e) - 1]) ?? []
 
 			const tokens =
-				((await int.parsedOptions()).get("tokens") as number | undefined) ?? 0
+				((await int.parsedOptions()).get("oblivion") as number | undefined) ?? 0
 
 			const recipientCanGive = recipient.canGive({ hitlist, tokens })
 			if (recipientCanGive !== true) return int.reply(recipientCanGive, true)

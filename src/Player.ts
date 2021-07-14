@@ -109,7 +109,7 @@ export class Player {
 			}\` is missing HL entries. (Some of: ${trade.hitlist.join(", ")})`
 
 		if (trade.tokens > this.tokens) {
-			return `Not enough tokens from \`${this.name}\`. (${trade.tokens}/${this.tokens})`
+			return `Not enough oblivion from \`${this.name}\`. (${trade.tokens}/${this.tokens})`
 		}
 
 		return true
