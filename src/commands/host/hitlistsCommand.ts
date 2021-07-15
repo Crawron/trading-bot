@@ -16,6 +16,7 @@ export const hitlistsCommand = new Command(
 						.map(game.getPlayerNameFromId)
 						.map((n, i) => `\`${i + 1}\` ${n}`)
 						.join("\n") || "_Empty_",
+				inline: true,
 			}))
 
 			const embed = new RichEmbed({ fields: hitlists })
