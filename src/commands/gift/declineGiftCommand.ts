@@ -12,7 +12,7 @@ export const declineGiftCommand = new Command(
 		options: [
 			integerOpt(
 				"gift",
-				"Gift to decline, refered to by its position in /gifts pending (ex. gift:1)",
+				"Gift to decline, referred to by its position in /gift pending (ex. gift:1)",
 				true
 			),
 		],

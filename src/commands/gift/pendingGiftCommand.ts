@@ -1,10 +1,8 @@
-import { Command, integerOpt } from "../../slasher"
-import { getIncomingGiftsEmbed, getMemberColor, RichEmbed } from "../../embeds"
+import { Command } from "../../slasher"
+import { getIncomingGiftsEmbed } from "../../embeds"
 import { game } from "../../Game"
-import { Player } from "../../Player"
 import { errors } from "../../strings"
 import { checkGameAndPlayer, thoughtChannelOf } from "../common"
-import { getPlayerIncommingGifts } from "./common"
 
 export const pendingGiftCommand = new Command(
 	"pending",
