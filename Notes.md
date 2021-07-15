@@ -18,7 +18,7 @@
 
 ## Caution
 
-- Dead players are supposed to lose all entries on their hit list, but for the sake of internal integrity i'll keep them stored, i'll just pretend the entries don't exist for dead people. (Done!)
+- Dead players are supposed to lose all entries on their Hit List, but for the sake of internal integrity i'll keep them stored, i'll just pretend the entries don't exist for dead people. (Done!)
 
 ## Important Goals
 
@@ -59,7 +59,7 @@ Player
 - VPs
 - Remaining Trades
 - Tokens
-- Hit list
+- Hit List
 
 Trade (includes gifts)
 
@@ -67,6 +67,6 @@ Trade (includes gifts)
 - isGift
 - Dealer (Player ids)
 - Recipient (Player ids)
-- Giving (hit list and tokens)
-- Receiving (hit list and tokens)
+- Giving (Hit List and tokens)
+- Receiving (Hit List and tokens)
 - Round

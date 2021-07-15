@@ -68,7 +68,7 @@ export function playerInfoEmbed(player: Player): WebhookMessageEmbed {
 	const { name, tokens, member, vp, remainingTrades, dead } = player
 
 	const hitlist = player.dead
-		? "🩸 _You're wounded! Your hit list will remain empty for the rest of the game. You can still recieve hit list items from other players, but they will be immediately deleted._"
+		? "🩸 _You're wounded! Your Hit List will remain empty for the rest of the game. You can still recieve Hit List targets from other players, but they will be immediately deleted._"
 		: listIndex(player.hitList.map(game.getPlayerNameFromId)) || `_Empty_`
 
 	const embed = new RichEmbed()
@@ -95,7 +95,7 @@ export function getTradeEmbed(
 	const { dealerGive, recipientGive, dealer, recipient } = trade
 
 	const dealerPart = dealerGive
-		? `**Hit List Items:** ${
+		? `**Hit List Targets:** ${
 				game.getPlayerNamesListFromIds(dealerGive.hitlist) || "*None*"
 		  }\n**Oblivion: ${dealerGive.tokens}** ${emoji.oblivion.repeat(
 				dealerGive.tokens
@@ -103,7 +103,7 @@ export function getTradeEmbed(
 		: "*Pending...*"
 
 	const recipientPart = recipientGive
-		? `**Hit List Items:** ${
+		? `**Hit List Targets:** ${
 				game.getPlayerNamesListFromIds(recipientGive.hitlist) || "*None*"
 		  }\n**Oblivion: ${recipientGive.tokens}** ${emoji.oblivion.repeat(
 				recipientGive.tokens

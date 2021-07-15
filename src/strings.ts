@@ -11,8 +11,8 @@ export const errors = {
 	existentTrade: "There is already a pending trade between you",
 	ranOut: "You have ran out of trades for the game",
 	hitlistIndex:
-		"Write Hit List items by their position on your `/inventory`. (ex: `hitlist: 1,3`)",
-	outOfList: "You've given a Hit List item that's not your list",
+		"Write Hit List Targets by their position on your `/inventory`. (ex: `hitlist: 1,3`)",
+	outOfList: "You've given a Hit List Target that's not your list",
 }
 
 export const colors = {

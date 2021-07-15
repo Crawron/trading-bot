@@ -71,13 +71,13 @@ export const partTradeCommand = new Command(
 
 			if (hitlistIndices.some((i) => isNaN(i)))
 				return int.reply(
-					"Write Hit List items by their position on your `/inventory`. (ex: `hitlist: 1,3`)",
+					"Write Hit List Targets by their position on your `/inventory`. (ex: `hitlist: 1,3`)",
 					true
 				)
 
 			if (hitlistIndices.some((i) => i >= recipient.hitList.length || i < 0))
 				return int.reply(
-					"You've given a Hit List item that's not your list",
+					"You've given a Hit List Target that's not your list",
 					true
 				)
 

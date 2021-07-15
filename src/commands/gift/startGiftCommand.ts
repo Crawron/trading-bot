@@ -17,7 +17,7 @@ export const startGiftCommand = new Command(
 	{
 		options: [
 			memberOpt("player", "Who will recieve this gift?", true),
-			stringOpt("hitlist", "Hit List items to give"),
+			stringOpt("hitlist", "Hit List Targets to give"),
 			integerOpt("oblivion", "Amount of oblivion to give"),
 		],
 		action: async (int) => {
