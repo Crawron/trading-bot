@@ -13,6 +13,7 @@ import "dotenv/config"
 import { pendingCommand } from "./commands/pendingCommand"
 import { rollCommand } from "./commands/rollCommand"
 import { giftGroup } from "./commands/gift/giftGroup"
+import { petCommand } from "./commands/petCommand"
 
 export const botClient = new Client(process.env.TOKEN!, {
 	restMode: true,
@@ -24,12 +25,13 @@ botClient.on("ready", async () => {
 	new CommandHandler(botClient, {
 		commands: [
 			tradeGroup,
+			giftGroup,
 			debugGroup,
+			hostGroup,
 			inventoryCommand,
 			pendingCommand,
-			hostGroup,
 			rollCommand,
-			giftGroup,
+			petCommand,
 		],
 	})
 
