@@ -71,7 +71,7 @@ export const acceptGiftCommand = new Command(
 
 			game.logGameInfo({
 				content: `A gift from **${gift.dealer.member.mention}** for **${gift.recipient.member.mention}** has been accepted`,
-				embed: getGiftEmbed(gift),
+				embed: getGiftEmbed(gift, true),
 			})
 
 			game.uploadPlayers()
