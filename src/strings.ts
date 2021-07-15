@@ -1,6 +1,6 @@
 export const emoji = {
 	prestige: "<:res_skillpoint:695407583346819083>",
-	oblivion: "<:LunarCoin:623550952028241921>",
+	oblivion: "<:Oblivion:865253907310837770>",
 }
 
 export const errors = {
