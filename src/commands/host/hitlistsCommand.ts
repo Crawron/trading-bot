@@ -9,12 +9,12 @@ export const hitlistsCommand = new Command(
 	"Displays hitlists from all players",
 	{
 		action: async (int) => {
-			const hitlists = [...game.players.values()].map((p, i) => ({
+			const hitlists = [...game.players.values()].map((p) => ({
 				name: p.name,
 				value:
 					p.hitList
 						.map(game.getPlayerNameFromId)
-						.map((n) => `\`${i + 1}\` ${n}`)
+						.map((n, i) => `\`${i + 1}\` ${n}`)
 						.join("\n") || "_Empty_",
 			}))
 
