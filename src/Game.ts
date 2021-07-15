@@ -198,6 +198,15 @@ class Game {
 		}
 	}
 
+	async uploadVars(db?: SheetDatabase) {
+		db ??= await getDbConnection()
+
+		const varsTable = db.getTable("GameVars")
+		await varsTable.clear()
+
+		varsTable.insertMany([...this.vars.entries()])
+	}
+
 	private async fetchPlayers(db?: SheetDatabase) {
 		db ??= await getDbConnection()
 		const playersTable = db.getTable("Players").data as RawPlayer[]

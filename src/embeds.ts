@@ -57,7 +57,7 @@ class RichEmbed {
 		return this
 	}
 
-	color(color: number) {
+	color(color?: number) {
 		this.raw.color = color
 		return this
 	}
@@ -154,7 +154,7 @@ export function getGiftEmbed(gift: Exchange): WebhookMessageEmbed {
 		.color(getMemberColor(gift.dealer.member)).raw
 }
 
-export function getMemberColor(member: Eris.Member): number {
+export function getMemberColor(member: Eris.Member) {
 	const colorRoles = member.roles
 		.map((rid) => member.guild.roles.get(rid))
 		.filter((r): r is Eris.Role => r !== undefined)
@@ -166,5 +166,5 @@ export function getMemberColor(member: Eris.Member): number {
 		a.position > b.position ? a : b
 	)
 
-	return highestColorRole.color
+	return highestColorRole.color || undefined
 }
