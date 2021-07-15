@@ -145,13 +145,15 @@ export function getGiftEmbed(
 			"Hit List Entries",
 			gift
 				.dealerGive!.hitlist.map((e) => game.getPlayerNameFromId(e))
-				.join("\n") || `_None_`
+				.join("\n") || `_None_`,
+			true
 		)
 		.field(
 			"Oblivion",
 			`**${gift.dealerGive?.tokens}** ${emoji.oblivion.repeat(
 				gift.dealerGive?.tokens ?? 0
-			)}`
+			)}`,
+			true
 		)
 		.image("https://via.placeholder.com/360x1/2f3136/2f3136")
 
