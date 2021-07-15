@@ -4,8 +4,7 @@ import { getGiftEmbed } from "../../embeds"
 import { Exchange } from "../../Exchange"
 import { game } from "../../Game"
 import { errors } from "../../strings"
-import { checkGameAndPlayer } from "../common"
-import { thoughtChannelOf } from "../trade/common"
+import { checkGameAndPlayer, thoughtChannelOf } from "../common"
 
 export const startGiftCommand = new Command(
 	"start",
@@ -24,14 +23,12 @@ export const startGiftCommand = new Command(
 			// check if in thoughts channel
 			const dealerThoughts = thoughtChannelOf(dealer, int.guild)
 
-			console.log({ thoughts: dealerThoughts?.id, intention: int.channel.id })
-
 			if (dealerThoughts?.id !== int.channel.id)
 				return int.reply(errors.thoughtsOnly, true)
 
 			if (game.hasOutstanding(dealer))
 				return int.reply(
-					"You have pending exchanges where you have given a part. You must wait for them to be resolved before giving a gift. (`/pending`)",
+					"You have `/pending` exchanges where you have given a part. You must wait for them to be resolved before giving a gift.",
 					true
 				)
 
@@ -40,7 +37,10 @@ export const startGiftCommand = new Command(
 				.getAllExchangesInvolving(dealer)
 				.find((e) => e.isGift && e.recipient.id === dealer.id)
 
-			if (pendingInGifts) return
+			if (pendingInGifts)
+				return int.reply(
+					"You have pending gifts incoming. You must accept or decline them before sending more gifts."
+				)
 
 			const targetMember = await int.option<Eris.Member>("player")
 			if (!game.isPlayer(targetMember.id))

@@ -63,6 +63,20 @@ export class Exchange {
 		return exch
 	}
 
+	hasGivenPart(player: Player) {
+		if (player.id === this.dealer.id)
+			return !Exchange.isEmptyPart(this.dealerGive)
+		if (player.id === this.recipient.id)
+			return !Exchange.isEmptyPart(this.recipientGive)
+		return false
+	}
+
+	private static isEmptyPart(part: ExchangeSide | undefined) {
+		if (part == undefined) return true
+		if (part.tokens === 0 && part.hitlist.length === 0) return true
+		else return false
+	}
+
 	/** return true on success, string with reason on fail  */
 	dealerGives(side: ExchangeSide) {
 		const check = this.dealer.canGive(side, !this.isGift)

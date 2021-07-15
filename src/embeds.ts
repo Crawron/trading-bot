@@ -6,7 +6,7 @@ import { listIndex } from "./helpers"
 import { Player } from "./Player"
 import { colors, emoji } from "./strings"
 
-class RichEmbed {
+export class RichEmbed {
 	raw: WebhookMessageEmbed
 
 	constructor(embed: Omit<WebhookMessageEmbed, "type"> = {}) {
@@ -154,17 +154,44 @@ export function getGiftEmbed(gift: Exchange): WebhookMessageEmbed {
 		.color(getMemberColor(gift.dealer.member)).raw
 }
 
+export function pendingExchangesEmbed(player: Player) {
+	const exchanges = game.getAllExchangesInvolving(player)
+
+	let trades = exchanges.filter((e) => !e.isGift)
+	let gifts = exchanges.filter((e) => e.isGift)
+	let pending = exchanges.some((e) => e.hasGivenPart(player))
+
+	const exchToString = (e: Exchange, i: number) => {
+		return `${e.isGift ? `\`${i + 1}\`` : "-"} ${e.dealer.name} ${
+			e.isGift ? "➡" : "↔"
+		} ${e.recipient.name} ${e.hasGivenPart(player) ? ":warning:" : ""}`
+	}
+
+	const embed = new RichEmbed()
+		.author(`${player.name}'s Pending Exchanges`, player.member.avatarURL)
+		.color(getMemberColor(player.member))
+		.field("Trades", trades.map(exchToString).join("\n") || "_None_", true)
+		.field("Gifts", gifts.map(exchToString).join("\n") || "_None_", true)
+
+	if (pending)
+		embed.description(
+			":warning: *You have given a part in an exchange, it must be resolved before you can give in any other.*"
+		)
+
+	return embed.raw
+}
+
 export function getMemberColor(member: Eris.Member) {
 	const colorRoles = member.roles
 		.map((rid) => member.guild.roles.get(rid))
 		.filter((r): r is Eris.Role => r !== undefined)
 		.filter((r) => r.color)
 
-	if (colorRoles.length < 1) return 0
+	if (colorRoles.length < 1) return undefined
 
 	const highestColorRole = colorRoles.reduce((a, b) =>
 		a.position > b.position ? a : b
 	)
 
-	return highestColorRole.color || undefined
+	return highestColorRole.color
 }

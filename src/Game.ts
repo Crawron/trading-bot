@@ -2,17 +2,14 @@ import Eris = require("eris")
 import SheetDatabase from "sheets-database"
 import { getDbConnection } from "./database"
 import { Exchange, ExchangeSide, RawExchange } from "./Exchange"
-import { logInfo } from "./logging"
 import { botClient } from "./main"
 import { Player, RawPlayer } from "./Player"
-import { RawChannel } from "./types"
 
 class Game {
 	players = new Map<string, Player>()
 	vars = new Map<string, string | number | boolean>()
 
 	activeExchanges: Map<string, Exchange> = new Map()
-	channels: RawChannel[] = []
 
 	constructor() {
 		this.getPlayer = this.getPlayer.bind(this)
@@ -34,9 +31,6 @@ class Game {
 		await this.fetchPlayers(db)
 		this.fetchVars(db)
 		this.fetchExchanges(db)
-
-		/* Fetch Channels */
-		this.channels = db.getTable("Channels").data as RawChannel[]
 
 		// logInfo("Fetched Game Data")
 	}
@@ -84,10 +78,8 @@ class Game {
 	}
 
 	hasOutstanding(player: Player) {
-		return [...this.activeExchanges.values()].some(
-			(e) =>
-				(e.dealer.id === player.id && e.dealerGive !== undefined) ||
-				(e.recipient.id === player.id && e.recipientGive !== undefined)
+		return [...this.activeExchanges.values()].some((e) =>
+			e.hasGivenPart(player)
 		)
 	}
 

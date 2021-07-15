@@ -9,21 +9,21 @@ export const roundCommand = new Command(
 		options: [
 			integerOpt("round", "Which round", true),
 			booleanOpt(
-				"silent",
-				"Whether to alert each channel of the round change (False when round: 0)"
+				"announce",
+				"Whether to alert each channel of the round change (Ignored when round: 0)"
 			),
 		],
 		action: async (int) => {
 			int.defer()
 
 			const round = await int.option<number>("round")
-			const silent = await int.option("silent", false)
+			const announce = await int.option("announce", false)
 
 			const textChannels = int.guild.channels.filter(
 				(c) => c.type === Eris.Constants.ChannelTypes.GUILD_TEXT
 			) as Eris.TextChannel[]
 
-			if (round > 0 && !silent)
+			if (round > 0 && announce)
 				for (const channel of textChannels)
 					channel.createMessage(
 						`:sparkles::star: **Start of Round ${round}** :star::sparkles:`
@@ -32,7 +32,7 @@ export const roundCommand = new Command(
 			game.vars.set("round", round)
 			await game.uploadVars()
 
-			int.editReply(`Got it! ${round < 1 && "Game stopped"}`)
+			int.editReply(`Got it! ${round < 1 ? "Game stopped" : `Round ${round}`}`)
 		},
 	}
 )

@@ -59,7 +59,7 @@ export const partTradeCommand = new Command(
 
 			if (game.hasOutstanding(recipient))
 				return int.reply(
-					"You have pending exchanges where you have given a part. You must wait for them to be resolved before giving another part in a trade. (`/pending`)",
+					"You have `/pending` exchanges where you have given a part. You must wait for them to be resolved before giving another part in a trade.",
 					true
 				)
 

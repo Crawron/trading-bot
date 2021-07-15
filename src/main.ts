@@ -34,8 +34,8 @@ botClient.on("ready", async () => {
 	})
 
 	await botClient.guilds.get(process.env.GUILDID!)?.fetchAllMembers()
-
 	await game.fetchData().catch(logError())
+
 	botClient.editStatus("online")
 	console.log("Ready.")
 })

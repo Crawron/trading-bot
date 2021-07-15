@@ -32,7 +32,7 @@ export const startTradeCommand = new Command("start", "Initiate a new trade.", {
 
 		if (game.hasOutstanding(dealer))
 			return int.reply(
-				"You have pending exchanges where you have given a part. You must wait for them to be resolved before starting a new trade. (`/pending`)",
+				"You have `/pending` exchanges where you have given a part. You must wait for them to be resolved before starting a new trade.",
 				true
 			)
 
