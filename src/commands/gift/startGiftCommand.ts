@@ -1,10 +1,15 @@
 import * as Eris from "eris"
 import { Command, integerOpt, memberOpt, stringOpt } from "slasher"
-import { getGiftEmbed } from "../../embeds"
+import {
+	getGiftEmbed,
+	getIncomingGiftsEmbed,
+	pendingExchangesEmbed,
+} from "../../embeds"
 import { Exchange } from "../../Exchange"
 import { game } from "../../Game"
 import { errors } from "../../strings"
 import { checkGameAndPlayer, thoughtChannelOf } from "../common"
+import { getPlayerIncommingGifts } from "./common"
 
 export const startGiftCommand = new Command(
 	"start",
@@ -28,8 +33,9 @@ export const startGiftCommand = new Command(
 
 			if (game.hasOutstanding(dealer))
 				return int.reply(
-					"You have `/pending` exchanges where you have given a part. You must wait for them to be resolved before giving a gift.",
-					true
+					"You have pending exchanges where you have given a part. You must wait for them to be resolved before giving a gift.",
+					true,
+					pendingExchangesEmbed(dealer)
 				)
 
 			// can't make new gifts if they have a pending gift incoming
@@ -85,15 +91,24 @@ export const startGiftCommand = new Command(
 			game.activeExchanges.set(gift.id, gift)
 			game.uploadExchanges()
 
-			int.reply(undefined, false, getGiftEmbed(gift))
+			int.reply(
+				`Got it! I will tell ${gift.recipient.name} about this gift`,
+				false,
+				getGiftEmbed(gift, true)
+			)
 
 			const recipientChannel = thoughtChannelOf(recipient, int.guild)
 			if (!recipientChannel)
 				throw new Error(`Couldn't find thoughts for ${recipient.name}`)
 
-			recipientChannel.createMessage(
-				`${recipient.member.mention}, you've recieved a gift from ${dealer.member.mention}, you don't know what it contains. \nYou may \`/gift accept\` it or \`/gift decline\` it.`
-			)
+			recipientChannel.createMessage({
+				content: `${recipient.member.mention}, you've recieved a gift from ${
+					dealer.member.mention
+				} (\`${
+					getPlayerIncommingGifts(recipient).length
+				}\`), you don't know what it contains. You may \`/gift accept\` or \`/gift decline\` it.`,
+				embed: getIncomingGiftsEmbed(recipient),
+			})
 		},
 	}
 )

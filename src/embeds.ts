@@ -1,5 +1,6 @@
 import Eris = require("eris")
 import { WebhookMessageEmbed } from "slasher/src/ApiTypes"
+import { getPlayerIncommingGifts } from "./commands/gift/common"
 import { Exchange } from "./Exchange"
 import { game } from "./Game"
 import { listIndex } from "./helpers"
@@ -133,10 +134,13 @@ export function getTradeEmbed(
 	return embed.raw
 }
 
-export function getGiftEmbed(gift: Exchange): WebhookMessageEmbed {
-	return new RichEmbed()
+export function getGiftEmbed(
+	gift: Exchange,
+	showRecipient = false
+): WebhookMessageEmbed {
+	const embed = new RichEmbed()
 		.title(`Gift **${gift.dealer.name} ➡ ${gift.recipient.name}**`)
-		.description(`*${gift.recipient.name} will be given the following items*`)
+		.description(`*This lovely gift contains the following*`)
 		.field(
 			"Hit List Entries",
 			gift
@@ -150,8 +154,16 @@ export function getGiftEmbed(gift: Exchange): WebhookMessageEmbed {
 			)}`
 		)
 		.image("https://via.placeholder.com/360x1/2f3136/2f3136")
-		.thumbnail(gift.recipient.member.avatarURL)
-		.color(getMemberColor(gift.dealer.member)).raw
+
+	if (showRecipient) {
+		embed.thumbnail(gift.recipient.member.avatarURL)
+		embed.color(getMemberColor(gift.dealer.member))
+	} else {
+		embed.thumbnail(gift.dealer.member.avatarURL)
+		embed.color(getMemberColor(gift.dealer.member))
+	}
+
+	return embed.raw
 }
 
 export function pendingExchangesEmbed(player: Player) {
@@ -172,11 +184,30 @@ export function pendingExchangesEmbed(player: Player) {
 		.color(getMemberColor(player.member))
 		.field("Trades", trades.map(exchToString).join("\n") || "_None_", true)
 		.field("Gifts", gifts.map(exchToString).join("\n") || "_None_", true)
+		.image("https://via.placeholder.com/360x1/2f3136/2f3136")
 
 	if (pending)
 		embed.description(
 			":warning: *You have given a part in an exchange, it must be resolved before you can give in any other.*"
 		)
+
+	return embed.raw
+}
+
+export function getIncomingGiftsEmbed(player: Player) {
+	const gifts = getPlayerIncommingGifts(player)
+	const embed = new RichEmbed()
+		.color(getMemberColor(player.member))
+		.author(`Incoming Gifts`, player.member.avatarURL)
+		.image("https://via.placeholder.com/360x1/2f3136/2f3136")
+		.description(
+			gifts
+				.map((g, i) => `\`${i + 1}\` From **${g.dealer.name}**`)
+				.join("\n") || "_None_"
+		)
+
+	if (gifts.length > 0)
+		embed.footer("You can't gift while you have incoming gifts")
 
 	return embed.raw
 }

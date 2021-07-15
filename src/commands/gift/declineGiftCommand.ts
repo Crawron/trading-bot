@@ -1,19 +1,18 @@
 import { Command, integerOpt } from "slasher"
-import { getGiftEmbed, getIncomingGiftsEmbed } from "../../embeds"
-import { Exchange } from "../../Exchange"
+import { getIncomingGiftsEmbed, getGiftEmbed } from "../../embeds"
 import { game } from "../../Game"
 import { errors } from "../../strings"
 import { checkGameAndPlayer, thoughtChannelOf } from "../common"
 import { getPlayerIncommingGifts } from "./common"
 
-export const acceptGiftCommand = new Command(
-	"accept",
-	"Accepts an incoming gift",
+export const declineGiftCommand = new Command(
+	"decline",
+	"Declines an incoming gift",
 	{
 		options: [
 			integerOpt(
 				"gift",
-				"Gift to accept, refered to by its position in /gifts pending (ex. gift:1)",
+				"Gift to decline, refered to by its position in /gifts pending (ex. gift:1)",
 				true
 			),
 		],
@@ -28,7 +27,7 @@ export const acceptGiftCommand = new Command(
 
 			const gifts = getPlayerIncommingGifts(player)
 			if (gifts.length === 0)
-				return int.reply("You have no incoming gifts to accept", true)
+				return int.reply("You have no incoming gifts to decline", true)
 
 			const giftPos = await int.option<number>("gift")
 
@@ -40,41 +39,20 @@ export const acceptGiftCommand = new Command(
 				)
 
 			const gift = gifts[giftPos - 1]
-			const result = gift.tradeResult
-
 			const { dealer, recipient } = gift
-
-			dealer.hitList = result.dealer.hitlist
-			dealer.tokens = result.dealer.tokens
-
-			recipient.hitList = result.recipient.hitlist
-			recipient.tokens = result.recipient.tokens
-
-			game.players.set(dealer.id, dealer)
-			game.players.set(recipient.id, recipient)
 
 			game.activeExchanges.delete(gift.id)
 
-			int.reply(
-				`You've accepted ${gift.dealer.name}'s gift! :confetti_ball:`,
-				false,
-				getGiftEmbed(gift, true)
-			)
+			int.reply(`You've declined ${gift.dealer.name}'s gift`)
 
 			const dealersThoughts = thoughtChannelOf(dealer, int.guild)
 			if (!dealersThoughts) throw new Error(`${dealer.name} no thoughts`)
 
 			dealersThoughts.createMessage({
-				content: `${dealer.member.mention}, ${recipient.name} has accepted your gift!`,
-				embed: getGiftEmbed(gift),
+				content: `${dealer.member.mention}, ${recipient.name} has declined your gift`,
+				embed: getGiftEmbed(gift, true),
 			})
 
-			game.logGameInfo({
-				content: `A gift from **${gift.dealer.member.mention}** for **${gift.recipient.member.mention}** has been accepted`,
-				embed: getGiftEmbed(gift),
-			})
-
-			game.uploadPlayers()
 			game.uploadExchanges()
 		},
 	}

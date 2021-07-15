@@ -1,6 +1,6 @@
 import { Command, integerOpt, stringOpt } from "slasher"
 import { WebhookMessageEmbed } from "slasher/src/ApiTypes"
-import { getTradeEmbed } from "../../embeds"
+import { getTradeEmbed, pendingExchangesEmbed } from "../../embeds"
 import { Exchange, ExchangeSide } from "../../Exchange"
 import { game } from "../../Game"
 import { solveTriangle } from "./common"
@@ -59,8 +59,9 @@ export const partTradeCommand = new Command(
 
 			if (game.hasOutstanding(recipient))
 				return int.reply(
-					"You have `/pending` exchanges where you have given a part. You must wait for them to be resolved before giving another part in a trade.",
-					true
+					"You have pending exchanges where you have given a part. You must wait for them to be resolved before giving another part in a trade.",
+					true,
+					pendingExchangesEmbed(recipient)
 				)
 
 			const hitlistStr = await int.option("hitlist", "")

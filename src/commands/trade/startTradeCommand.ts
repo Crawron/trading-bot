@@ -1,6 +1,6 @@
 import Eris = require("eris")
 import { Command, integerOpt, stringOpt } from "slasher"
-import { getTradeEmbed } from "../../embeds"
+import { getTradeEmbed, pendingExchangesEmbed } from "../../embeds"
 import { game } from "../../Game"
 import { Player } from "../../Player"
 import { errors } from "../../strings"
@@ -32,8 +32,9 @@ export const startTradeCommand = new Command("start", "Initiate a new trade.", {
 
 		if (game.hasOutstanding(dealer))
 			return int.reply(
-				"You have `/pending` exchanges where you have given a part. You must wait for them to be resolved before starting a new trade.",
-				true
+				"You have pending exchanges where you have given a part. You must wait for them to be resolved before starting a new trade.",
+				true,
+				pendingExchangesEmbed(dealer)
 			)
 
 		const hitlistStr = await int.option("hitlist", "")

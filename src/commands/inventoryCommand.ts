@@ -2,6 +2,7 @@ import { Command } from "slasher"
 import { playerInfoEmbed } from "../embeds"
 import { game } from "../Game"
 import { errors } from "../strings"
+import { checkGameAndPlayer } from "./common"
 
 export const inventoryCommand = new Command(
 	"inventory",
@@ -9,7 +10,7 @@ export const inventoryCommand = new Command(
 	{
 		permissions: { roles: [process.env.PLAYERROLEID!] },
 		action: async (int) => {
-			if (!game.isPlayer(int.member.id)) return int.reply(errors.playerOnly)
+			if (!checkGameAndPlayer(int)) return
 
 			const player = game.getPlayer(int.member.id)
 			int.reply(undefined, true, playerInfoEmbed(player))

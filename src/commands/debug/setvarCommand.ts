@@ -13,6 +13,7 @@ export const setvarCommand = new Command(
 			),
 		],
 		action: async (int) => {
+			await int.defer()
 			const key = await int.option<string>("name")
 			const value = await int.option<string | null>("value", null)
 
@@ -21,7 +22,7 @@ export const setvarCommand = new Command(
 
 			await game.uploadVars()
 
-			int.reply("Done!")
+			int.editReply("Done!")
 		},
 	}
 )

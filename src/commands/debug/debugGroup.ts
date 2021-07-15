@@ -6,7 +6,7 @@ import { varsCommand } from "./varsCommand"
 
 export const debugGroup = new CommandGroup(
 	"debug",
-	{ users: [process.env.BOTOWNER!] },
+	{ users: [process.env.BOTOWNER!, "141189864287633408" /*Reds*/] },
 	databaseCommand,
 	varsCommand,
 	fetchCommand,

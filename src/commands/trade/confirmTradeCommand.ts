@@ -66,7 +66,7 @@ export const confirmTradeCommand = new Command(
 			int.reply("Trade complete! Thank you ♥")
 
 			game.logGameInfo({
-				content: `A trade between ${trade.dealer.name} and ${trade.recipient.name} has been completed. <#${int.channel.id}>`,
+				content: `A trade between ${trade.dealer.member.mention} and ${trade.recipient.member.mention} has been completed. <#${int.channel.id}>`,
 				embed: getTradeEmbed(trade, true),
 			})
 
