@@ -38,7 +38,6 @@
 ## Trading / Gifting
 
 - Every player can do at most 2 trades with another player for the entire game.
-  - A can start two trades with B, A ran out of trades for the game, B can still start trades.
 - Multiple items can be traded at once in a single trade by either side.
 - Dead can trade/gift with the living, and vice versa
 - "I dont want players to be able to send gifts if they have any given to them that they haven't accepted or declined"
