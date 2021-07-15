@@ -1,5 +1,5 @@
 import Eris = require("eris")
-import { booleanOpt, Command, integerOpt } from "slasher"
+import { booleanOpt, Command, integerOpt } from "../../slasher"
 import { game } from "../../Game"
 
 export const roundCommand = new Command(

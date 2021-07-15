@@ -1,5 +1,5 @@
 import { game } from "../../Game"
-import { Command } from "slasher"
+import { Command } from "../../slasher"
 
 export const varsCommand = new Command(
 	"vars",

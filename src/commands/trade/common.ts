@@ -1,5 +1,5 @@
 import * as Eris from "eris"
-import { channelOpt } from "slasher"
+import { channelOpt } from "../../slasher"
 import { game } from "../../Game"
 import { Player } from "../../Player"
 import { playersInChannel } from "../common"

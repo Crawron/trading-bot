@@ -1,4 +1,4 @@
-import { Command, stringOpt } from "slasher"
+import { Command, stringOpt } from "../slasher"
 
 export const rollCommand = new Command("roll", "Roll a die.", {
 	options: [stringOpt("sides", "Faces of the die.")],

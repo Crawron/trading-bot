@@ -1,4 +1,4 @@
-import { Command } from "slasher"
+import { Command } from "../../slasher"
 
 import { game } from "../../Game"
 import { logInfo } from "../../logging"

@@ -1,4 +1,4 @@
-import { Command } from "slasher"
+import { Command } from "../../slasher"
 import { getTradeEmbed } from "../../embeds"
 import { game } from "../../Game"
 import { LogColor, logInfo } from "../../logging"

@@ -1,4 +1,4 @@
-import { Command, stringOpt } from "slasher"
+import { Command, stringOpt } from "../../slasher"
 import { getDbConnection } from "../../database"
 
 export const databaseCommand = new Command("database", "Debug command", {

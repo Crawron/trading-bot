@@ -1,4 +1,4 @@
-import { Command } from "slasher"
+import { Command } from "../slasher"
 import { pendingExchangesEmbed } from "../embeds"
 import { Exchange } from "../Exchange"
 import { game } from "../Game"

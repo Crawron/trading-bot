@@ -1,4 +1,4 @@
-import { CommandGroup } from "slasher"
+import { CommandGroup } from "../../slasher"
 import { databaseCommand } from "./databaseCommand"
 import { fetchCommand, uploadCommand } from "./fetchUploadCommand"
 import { setvarCommand } from "./setvarCommand"

@@ -1,5 +1,5 @@
 import Eris = require("eris")
-import { WebhookMessageEmbed } from "slasher/src/ApiTypes"
+import { WebhookMessageEmbed } from "./slasher/ApiTypes"
 import { getPlayerIncommingGifts } from "./commands/gift/common"
 import { Exchange } from "./Exchange"
 import { game } from "./Game"

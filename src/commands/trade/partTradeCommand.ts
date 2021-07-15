@@ -1,7 +1,6 @@
-import { Command, integerOpt, stringOpt } from "slasher"
-import { WebhookMessageEmbed } from "slasher/src/ApiTypes"
+import { Command, integerOpt, stringOpt } from "../../slasher"
 import { getTradeEmbed, pendingExchangesEmbed } from "../../embeds"
-import { Exchange, ExchangeSide } from "../../Exchange"
+import { ExchangeSide } from "../../Exchange"
 import { game } from "../../Game"
 import { solveTriangle } from "./common"
 

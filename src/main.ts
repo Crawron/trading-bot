@@ -1,7 +1,7 @@
 import { Client } from "eris"
 import * as Eris from "eris"
 
-import { CommandHandler } from "slasher"
+import { CommandHandler } from "././slasher"
 import { game } from "./Game"
 import { LogColor, logError, logInfo } from "./logging"
 import { tradeGroup } from "./commands/trade/tradeGroup"

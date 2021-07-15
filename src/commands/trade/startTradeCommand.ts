@@ -1,5 +1,5 @@
 import Eris = require("eris")
-import { Command, integerOpt, stringOpt } from "slasher"
+import { Command, integerOpt, stringOpt } from "../../slasher"
 import { getTradeEmbed, pendingExchangesEmbed } from "../../embeds"
 import { game } from "../../Game"
 import { Player } from "../../Player"

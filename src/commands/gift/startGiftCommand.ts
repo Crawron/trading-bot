@@ -1,5 +1,5 @@
 import * as Eris from "eris"
-import { Command, integerOpt, memberOpt, stringOpt } from "slasher"
+import { Command, integerOpt, memberOpt, stringOpt } from "../../slasher"
 import {
 	getGiftEmbed,
 	getIncomingGiftsEmbed,

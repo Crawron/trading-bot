@@ -3,13 +3,13 @@ lockfileVersion: 5.3
 specifiers:
   '@types/node': ^15.6.0
   '@types/node-fetch': ^2.5.10
+  '@types/ws': ^7.4.6
   bufferutil: ^4.0.3
   dotenv: ^10.0.0
   eris: ^0.15.1
   erlpack: github:discord/erlpack
   node-fetch: ^2.6.1
   sheets-database: ^1.0.4
-  slasher: link:/home/craw/Dev/fine
   ts-node: ^9.1.1
   typescript: ^4.2.4
   utf-8-validate: ^5.0.5
@@ -22,13 +22,13 @@ dependencies:
   erlpack: github.com/discord/erlpack/e27db8f82892bdb9b28a0547cc394d68b5d2242d
   node-fetch: 2.6.1
   sheets-database: 1.0.4
-  slasher: link:../fine
   utf-8-validate: 5.0.5
   zlib-sync: 0.1.7
 
 devDependencies:
   '@types/node': 15.6.0
   '@types/node-fetch': 2.5.10
+  '@types/ws': 7.4.6
   ts-node: 9.1.1_typescript@4.2.4
   typescript: 4.2.4
 
@@ -41,8 +41,18 @@ packages:
       form-data: 3.0.1
     dev: true
 
+  /@types/node/15.14.2:
+    resolution: {integrity: sha512-dvMUE/m2LbXPwlvVuzCyslTEtQ2ZwuuFClDrOQ6mp2CenCg971719PTILZ4I6bTP27xfFFc+o7x2TkLuun/MPw==}
+    dev: true
+
   /@types/node/15.6.0:
     resolution: {integrity: sha512-gCYSfQpy+LYhOFTKAeE8BkyGqaxmlFxe+n4DKM6DR0wzw/HISUE/hAmkC/KT8Sw5PCJblqg062b3z9gucv3k0A==}
+    dev: true
+
+  /@types/ws/7.4.6:
+    resolution: {integrity: sha512-ijZ1vzRawI7QoWnTNL8KpHixd2b2XVb9I9HAqI3triPsh1EC0xH0Eg6w2O3TKbDCgiNNlJqfrof6j4T2I+l9vw==}
+    dependencies:
+      '@types/node': 15.14.2
     dev: true
 
   /abort-controller/3.0.0:

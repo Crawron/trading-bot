@@ -1,4 +1,4 @@
-import { Command, stringOpt } from "slasher"
+import { Command, stringOpt } from "../../slasher"
 import { game } from "../../Game"
 
 export const setvarCommand = new Command(

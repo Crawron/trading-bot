@@ -1,7 +1,5 @@
-import fetch from "node-fetch"
 import * as Eris from "eris"
-import { botClient } from "./main"
-import { Interaction } from "./slasher"
+import { Interaction } from "./Interaction"
 
 type WebhookEmbedField = {
 	name: string
@@ -42,15 +40,8 @@ export type WebhookMessage = Partial<{
 }>
 
 function getInteractionFields(int: Interaction): WebhookEmbedField[] {
-	const options =
-		int.options[0]?.type.toString() === "SUB_COMMAND"
-			? int.options[0].options ?? []
-			: int.options
-
-	const subCommand: string =
-		int.options[0]?.type.toString() === "SUB_COMMAND"
-			? int.options[0].value?.toString() ?? ""
-			: ""
+	const options = int.subCommand?.options
+	const subCommand = int.subCommand?.name
 
 	const fields: WebhookEmbedField[] = []
 
@@ -69,16 +60,11 @@ function getInteractionFields(int: Interaction): WebhookEmbedField[] {
 	if (int.channel)
 		fields.push({
 			name: "Channel",
-			value: `${int.channel} \`${int.channel.id}\``,
+			value: `${int.channel.mention} \`${int.channel.id}\``,
 			inline: true,
 		})
 
-	fields.push({
-		name: "User",
-		value: `${int.member} \`${int.member.id}\``,
-	})
-
-	if (options.length > 0)
+	if (options)
 		fields.push({
 			name: "Options",
 			value: options
@@ -102,7 +88,7 @@ function getUserWebhookMessage(
 		embeds: [
 			{
 				author: {
-					name: user.username + "#" + user.discriminator,
+					name: `${user.username}#${user.discriminator}`,
 					icon_url: user.avatarURL,
 				},
 				...theRestOfTheEmbed,
@@ -111,38 +97,40 @@ function getUserWebhookMessage(
 	}
 }
 
-export const logError = (int?: Interaction) => async (e: Error) => {
-	console.log(e.toString())
-	const message = getUserWebhookMessage(botClient.user!, {
-		title: e.toString(),
-		description: `\`\`\`\n${e.stack ?? e}\`\`\``,
-		color: 0xff6b81,
-		footer: {
-			text: "Error",
-			icon_url: "https://via.placeholder.com/20x20/ff6b81/ff6b81",
-		},
-		fields: int ? getInteractionFields(int) : [],
-	})
+export function logError(client: Eris.Client, int?: Interaction) {
+	return async (e: Error) => {
+		console.log(e.toString())
+		const message = getUserWebhookMessage(client.user!, {
+			title: e.toString(),
+			description: `\`\`\`\n${e.stack ?? e}\`\`\``,
+			color: 0xff6b81,
+			footer: {
+				text: "Error",
+				icon_url: "https://via.placeholder.com/20x20/ff6b81/ff6b81",
+			},
+			fields: int ? getInteractionFields(int) : [],
+		})
 
-	fetch("https://canary.discord.com/api" + process.env.LOGWEBHOOK!, {
-		method: "POST",
-		body: JSON.stringify(message),
-		headers: { "content-type": "application/json" },
-	})
+		client.requestHandler.request(
+			"POST",
+			process.env.LOGWEBHOOK!,
+			false,
+			message
+		)
+	}
 }
 
-export function logInfo(description: string, color: LogColor = LogColor.Blue) {
-	console.log(description)
-	const message = getUserWebhookMessage(botClient.user!, { description, color })
-
-	fetch("https://canary.discord.com/api" + process.env.LOGWEBHOOK!, {
-		method: "POST",
-		body: JSON.stringify(message),
-		headers: { "content-type": "application/json" },
-	})
+export function logInfo(
+	client: Eris.Client,
+	description: string,
+	color: LogColor = LogColor.Blue
+) {
+	console.log(description.toString())
+	const message = getUserWebhookMessage(client.user!, { description, color })
+	client.requestHandler.request("POST", process.env.LOGWEBHOOK!, false, message)
 }
 
-export enum LogColor {
+enum LogColor {
 	Red = 0xed4245,
 	Blue = 0x3498db,
 	Green = 0x3ba55c,

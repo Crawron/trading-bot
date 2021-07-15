@@ -1,6 +1,6 @@
 import * as Eris from "eris"
 
-import { Interaction } from "slasher"
+import { Interaction } from "../slasher"
 import { game } from "../Game"
 import { Player } from "../Player"
 import { errors } from "../strings"

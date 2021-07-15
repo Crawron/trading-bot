@@ -1,4 +1,4 @@
-import { Command, integerOpt } from "slasher"
+import { Command, integerOpt } from "../../slasher"
 import { getGiftEmbed, getIncomingGiftsEmbed } from "../../embeds"
 import { Exchange } from "../../Exchange"
 import { game } from "../../Game"

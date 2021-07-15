@@ -1,4 +1,4 @@
-import { CommandGroup } from "slasher"
+import { CommandGroup } from "../../slasher"
 import { cancelTradeCommand } from "./cancelTradeCommand"
 import { confirmTradeCommand } from "./confirmTradeCommand"
 import { partTradeCommand } from "./partTradeCommand"

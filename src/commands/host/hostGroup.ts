@@ -1,4 +1,4 @@
-import { CommandGroup } from "slasher"
+import { CommandGroup } from "../../slasher"
 import { addPlayerCommand } from "./addPlayerCommand"
 import { populateCommand } from "./populateCommand"
 import { roundCommand } from "./roundCommand"

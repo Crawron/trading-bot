@@ -1,4 +1,4 @@
-import { Command } from "slasher"
+import { Command } from "../slasher"
 import { playerInfoEmbed } from "../embeds"
 import { game } from "../Game"
 import { errors } from "../strings"
