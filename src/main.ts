@@ -39,7 +39,7 @@ botClient.on("ready", async () => {
 	await game.fetchData().catch(logError())
 
 	botClient.editStatus("online")
-	console.log("Ready.")
+	logInfo("Ready.", LogColor.Green)
 })
 
 botClient.on("messageCreate", async (msg) => {
