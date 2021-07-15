@@ -9,7 +9,8 @@
 		"typescript": "^4.2.4"
 	},
 	"scripts": {
-		"start": "nodemon src/main.ts"
+		"build": "tsc",
+		"start": "node build/main.js"
 	},
 	"dependencies": {
 		"bufferutil": "^4.0.3",
