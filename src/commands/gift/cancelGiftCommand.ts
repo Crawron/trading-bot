@@ -1,13 +1,12 @@
-import { Command, integerOpt } from "../../slasher"
-import { getIncomingGiftsEmbed, getGiftEmbed } from "../../embeds"
+import { Command } from "../../slasher"
+import { getGiftEmbed, getIncomingGiftsEmbed } from "../../embeds"
 import { game } from "../../Game"
 import { errors } from "../../strings"
 import { checkGameAndPlayer, thoughtChannelOf } from "../common"
-import { getPlayerIncommingGifts } from "./common"
 
 export const cancelGiftCommand = new Command(
 	"cancel",
-	"Cancels one of your gifts",
+	"Cancels your outgoing gift",
 	{
 		action: async (int) => {
 			if (!checkGameAndPlayer(int)) return
@@ -30,6 +29,15 @@ export const cancelGiftCommand = new Command(
 				false,
 				getGiftEmbed(gift, true)
 			)
+
+			const recipientChannel = thoughtChannelOf(gift.recipient, int.guild)
+			if (!recipientChannel)
+				throw new Error(`Couldn't find thoughts for ${gift.recipient.name}`)
+
+			recipientChannel.createMessage({
+				content: `${gift.recipient.member.mention}, ${gift.dealer.name} has cancelled their gift.`,
+				embed: getIncomingGiftsEmbed(gift.recipient),
+			})
 
 			game.uploadExchanges()
 		},
