@@ -44,13 +44,13 @@ export const playerCommand = new Command(
 				)
 				.field(
 					"Hit List",
-					(player.dead
-						? "🩸 _You're wounded! Your Hit List has been emptied. You can still recieve Hit List Targets from other players._"
-						: "") +
-						(player.hitList
-							.map(game.getPlayerNameFromId)
-							.map((n, i) => `\`${i + 1}\` ${n}`)
-							.join("\n") || "*Empty*"),
+					(player.hitList
+						.map(game.getPlayerNameFromId)
+						.map((n, i) => `\`${i + 1}\` ${n}`)
+						.join("\n") || "*Empty*") +
+						(player.dead
+							? "\n\n🩸 _You're wounded! Your Hit List has been emptied. You can still recieve Hit List Targets from other players._"
+							: ""),
 					false
 				)
 				.field(
