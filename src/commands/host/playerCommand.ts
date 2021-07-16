@@ -77,6 +77,7 @@ export const playerCommand = new Command(
 						.join("\n") || "_Empty_",
 					true
 				)
+				.field("Remaining Trades", `**${player.remainingTrades}**`, true)
 
 			const theresPlayers = playersInChannel(int.channel).length > 0
 			int.reply(undefined, theresPlayers, embed.raw)
