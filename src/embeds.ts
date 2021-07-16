@@ -67,9 +67,11 @@ export class RichEmbed {
 export function playerInfoEmbed(player: Player): WebhookMessageEmbed {
 	const { name, tokens, member, vp, remainingTrades, dead } = player
 
-	const hitlist = player.dead
-		? "🩸 _You're wounded! Your Hit List will remain empty for the rest of the game. You can still recieve Hit List targets from other players, but they will be immediately deleted._"
-		: listIndex(player.hitList.map(game.getPlayerNameFromId)) || `_Empty_`
+	const hitlist =
+		(player.dead
+			? "🩸 _You're wounded! Your Hit List has been emptied. You can still recieve Hit List targets from other players._"
+			: "") +
+		(listIndex(player.hitList.map(game.getPlayerNameFromId)) || `_Empty_`)
 
 	const embed = new RichEmbed()
 		.author(name, member.user.avatarURL)
