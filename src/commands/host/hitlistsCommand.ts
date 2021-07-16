@@ -20,8 +20,8 @@ export const hitlistsCommand = new Command(
 			}))
 
 			const embed = new RichEmbed({ fields: hitlists })
+				.title("Everyone's hitlists")
 				.image("https://via.placeholder.com/360x1/2f3136/2f3136")
-				.description("Everyone's hitlists")
 				.color(colors.digory).raw
 
 			const theresPlayers = playersInChannel(int.channel).length > 0
