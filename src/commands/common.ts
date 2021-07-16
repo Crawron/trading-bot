@@ -10,8 +10,10 @@ export function thoughtChannelOf(player: Player, guild: Eris.Guild) {
 		(c) => c.type === Eris.Constants.ChannelTypes.GUILD_TEXT
 	) as Eris.TextChannel[]
 
+	const allowedCategs = process.env.ALLOWEDEXCHANGECATEGORYID!.split(",")
+
 	return channels
-		.filter((c) => c.parentID !== process.env.TRADEIGNORECATEGORYID!)
+		.filter((c) => allowedCategs.includes(c.parentID || ""))
 		.filter((c) => playersInChannel(c).length === 1)
 		.find((c) => playersInChannel(c).find((p) => p.id === player.id))
 }

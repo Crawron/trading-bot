@@ -6,7 +6,8 @@ import { playersInChannel } from "../common"
 
 /** Finds the recipient player, given a pair channel id and one players's id */
 export function solveTriangle(playerId: string, channel: Eris.TextChannel) {
-	if (channel.parentID === process.env.TRADEIGNORECATEGORYID!) return
+	const allowedCategs = process.env.ALLOWEDEXCHANGECATEGORYID!.split(",")
+	if (!allowedCategs.includes(channel.parentID || "")) return
 
 	const otherPlayers = playersInChannel(channel)
 	if (otherPlayers.length !== 2) return
