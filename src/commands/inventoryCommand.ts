@@ -1,7 +1,6 @@
 import { Command } from "../slasher"
 import { playerInfoEmbed } from "../embeds"
 import { game } from "../Game"
-import { errors } from "../strings"
 import { checkGameAndPlayer } from "./common"
 
 export const inventoryCommand = new Command(
