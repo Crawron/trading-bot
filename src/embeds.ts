@@ -69,7 +69,7 @@ export function playerInfoEmbed(player: Player): WebhookMessageEmbed {
 
 	const hitlist =
 		(listIndex(player.hitList.map(game.getPlayerNameFromId)) || `_Empty_`) +
-		(player.dead
+		(dead
 			? "\n\n🩸 _You're wounded! Your Hit List has been emptied. You can still recieve Hit List Targets from other players._"
 			: "")
 
@@ -81,8 +81,10 @@ export function playerInfoEmbed(player: Player): WebhookMessageEmbed {
 			true
 		)
 		.field("Oblivion", `**${tokens}** ${emoji.oblivion.repeat(tokens)}`, true)
+		.field("Status", dead ? "_🩸 Wounded_" : "_Alive_", true)
+
+		.field("Hit List", hitlist, true)
 		.field("Trades Left", `${remainingTrades}`, true)
-		.field("Hit List", hitlist)
 		.image("https://via.placeholder.com/360x1/2f3136/2f3136")
 
 	if (getMemberColor(member)) embed.color(getMemberColor(member))
