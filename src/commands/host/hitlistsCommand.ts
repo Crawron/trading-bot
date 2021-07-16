@@ -10,7 +10,7 @@ export const hitlistsCommand = new Command(
 	{
 		action: async (int) => {
 			const hitlists = [...game.players.values()].map((p) => ({
-				name: p.name,
+				name: `${p.name}${p.dead ? " 🩸" : ""}`,
 				value:
 					p.hitList
 						.map(game.getPlayerNameFromId)
