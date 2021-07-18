@@ -3,7 +3,7 @@ import { RichEmbed } from "../../embeds"
 import { game } from "../../Game"
 import { LogColor } from "../../logging"
 import { Command, integerOpt, memberOpt } from "../../slasher"
-import { colors, em } from "../../strings"
+import { em } from "../../strings"
 
 export const giveCommand = new Command(
 	"give",
