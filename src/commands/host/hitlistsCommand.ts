@@ -1,7 +1,7 @@
 import { RichEmbed } from "../../embeds"
 import { game } from "../../Game"
 import { Command } from "../../slasher"
-import { colors, emoji } from "../../strings"
+import { colors, em } from "../../strings"
 import { playersInChannel } from "../common"
 
 export const hitlistsCommand = new Command(
@@ -11,8 +11,8 @@ export const hitlistsCommand = new Command(
 		action: async (int) => {
 			const hitlists = [...game.players.values()].map((p) => ({
 				name: `${p.name}\n${p.dead ? "🩸 | " : ""}**${p.vp}** ${
-					emoji.prestige
-				} - **${p.tokens}** ${emoji.oblivion} | **${
+					em.prestige
+				} - **${p.tokens}** ${em.oblivion} | **${
 					p.remainingTrades
 				}** :left_right_arrow:`,
 				value:

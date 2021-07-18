@@ -2,7 +2,7 @@ import * as Eris from "eris"
 import { getMemberColor, RichEmbed } from "../../embeds"
 import { game } from "../../Game"
 import { Command, memberOpt } from "../../slasher"
-import { emoji } from "../../strings"
+import { em } from "../../strings"
 import { playersInChannel } from "../common"
 
 export const playerCommand = new Command(
@@ -28,13 +28,13 @@ export const playerCommand = new Command(
 				.field(
 					"Prestige",
 					`**${player.vp - player.tokens}** (${player.vp} - ${player.tokens}${
-						emoji.oblivion
+						em.oblivion
 					})`,
 					true
 				)
 				.field(
 					"Oblivion",
-					`**${player.tokens}** ${emoji.oblivion.repeat(player.tokens)}`,
+					`**${player.tokens}** ${em.oblivion.repeat(player.tokens)}`,
 					true
 				)
 				.field(

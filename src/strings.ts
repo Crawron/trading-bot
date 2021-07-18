@@ -1,6 +1,7 @@
-export const emoji = {
-	prestige: "<:res_skillpoint:695407583346819083>",
+export const em = {
+	prestige: "<:Prestige:865254352900849684>",
 	oblivion: "<:Oblivion:865253907310837770>",
+	target: "<:Target:865601753163759626>",
 }
 
 export const errors = {

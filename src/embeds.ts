@@ -5,7 +5,7 @@ import { Exchange } from "./Exchange"
 import { game } from "./Game"
 import { listIndex } from "./helpers"
 import { Player } from "./Player"
-import { colors, emoji } from "./strings"
+import { colors, em } from "./strings"
 
 export class RichEmbed {
 	raw: WebhookMessageEmbed
@@ -77,10 +77,10 @@ export function playerInfoEmbed(player: Player): WebhookMessageEmbed {
 		.author(name, member.user.avatarURL)
 		.field(
 			"Prestige",
-			`**${vp - tokens}** (${vp} - ${tokens} ${emoji.oblivion})`,
+			`**${vp - tokens}** (${vp} - ${tokens} ${em.oblivion})`,
 			true
 		)
-		.field("Oblivion", `**${tokens}** ${emoji.oblivion.repeat(tokens)}`, true)
+		.field("Oblivion", `**${tokens}** ${em.oblivion.repeat(tokens)}`, true)
 		.field("Status", dead ? "_🩸 Wounded_" : "_Alive_", true)
 
 		.field("Hit List", hitlist, true)
@@ -101,7 +101,7 @@ export function getTradeEmbed(
 	const dealerPart = dealerGive
 		? `**Hit List Targets:** ${
 				game.getPlayerNamesListFromIds(dealerGive.hitlist) || "*None*"
-		  }\n**Oblivion: ${dealerGive.tokens}** ${emoji.oblivion.repeat(
+		  }\n**Oblivion: ${dealerGive.tokens}** ${em.oblivion.repeat(
 				dealerGive.tokens
 		  )}`
 		: "*Pending...*"
@@ -109,7 +109,7 @@ export function getTradeEmbed(
 	const recipientPart = recipientGive
 		? `**Hit List Targets:** ${
 				game.getPlayerNamesListFromIds(recipientGive.hitlist) || "*None*"
-		  }\n**Oblivion: ${recipientGive.tokens}** ${emoji.oblivion.repeat(
+		  }\n**Oblivion: ${recipientGive.tokens}** ${em.oblivion.repeat(
 				recipientGive.tokens
 		  )}`
 		: "*Pending...*"
@@ -154,7 +154,7 @@ export function getGiftEmbed(
 		)
 		.field(
 			"Oblivion",
-			`**${gift.dealerGive?.tokens}** ${emoji.oblivion.repeat(
+			`**${gift.dealerGive?.tokens}** ${em.oblivion.repeat(
 				gift.dealerGive?.tokens ?? 0
 			)}`,
 			true
