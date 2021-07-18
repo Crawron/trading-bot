@@ -69,6 +69,7 @@ export class Player {
 	}
 
 	get hitList() {
+		if (this.dead) return []
 		return this.def.hitList.sort()
 	}
 
