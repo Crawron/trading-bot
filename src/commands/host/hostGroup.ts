@@ -1,5 +1,6 @@
 import { CommandGroup } from "../../slasher"
 import { addPlayerCommand } from "./addPlayerCommand"
+import { giveCommand } from "./giveCommand"
 import { hitlistsCommand } from "./hitlistsCommand"
 import { playerCommand } from "./playerCommand"
 import { populateCommand } from "./populateCommand"
@@ -12,5 +13,6 @@ export const hostGroup = new CommandGroup(
 	populateCommand,
 	roundCommand,
 	hitlistsCommand,
-	playerCommand
+	playerCommand,
+	giveCommand
 )

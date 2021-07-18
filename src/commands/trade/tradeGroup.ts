@@ -13,6 +13,5 @@ export const tradeGroup = new CommandGroup(
 	partTradeCommand,
 	confirmTradeCommand,
 	pendingTradeCommand,
-	cancelTradeCommand,
-	giveCommand
+	cancelTradeCommand
 )
