@@ -7,7 +7,7 @@ import { colors, em } from "../../strings"
 
 export const giveCommand = new Command(
 	"give",
-	"NON UPDATING. Give an item to a player's inventory",
+	"Give an item to a player's inventory",
 	{
 		options: [
 			memberOpt("player", "Player to give to", true),
