@@ -70,7 +70,7 @@ export const startGiftCommand = new Command(
 			if (hitlist.length === 0 && tokens === 0)
 				return int.reply("You cannot give an empty gift", true)
 
-			const dealerCanGive = dealer.canGive({ hitlist, tokens })
+			const dealerCanGive = dealer.canGive({ hitlist, tokens }, false)
 			if (dealerCanGive !== true) return int.reply(dealerCanGive, true)
 
 			const recipient = game.getPlayer(targetMember.id)
