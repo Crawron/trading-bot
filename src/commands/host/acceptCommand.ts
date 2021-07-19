@@ -21,7 +21,7 @@ export const acceptGiftCommand = new Command(
 		],
 
 		action: async (int) => {
-			const member = await int.option<Eris.Member>("member")
+			const member = await int.option<Eris.Member>("player")
 
 			if (!game.isPlayer(member.id))
 				return int.reply(`${member.username} is not a player`)
