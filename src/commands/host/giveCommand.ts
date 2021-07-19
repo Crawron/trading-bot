@@ -50,9 +50,7 @@ export const giveCommand = new Command(
 
 			int.reply("Done!", false, embed)
 
-			game.logGameInfo({
-				embed,
-			})
+			game.logGameInfo({ embed })
 
 			game.uploadPlayers()
 		},
