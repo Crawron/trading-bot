@@ -30,7 +30,7 @@ export class Player {
 	tokens: number
 	vp: number
 
-	constructor(private def: PlayerParams) {
+	constructor(public def: PlayerParams) {
 		this.id = this.def.member.id
 		this.dead = this.def.dead
 		this.member = this.def.member

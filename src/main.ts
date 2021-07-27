@@ -2,17 +2,9 @@ import { Client } from "eris"
 import * as Eris from "eris"
 
 import { CommandHandler } from "././slasher"
-import { game } from "./Game"
 import { LogColor, logError, logInfo } from "./logging"
-import { tradeGroup } from "./commands/trade/tradeGroup"
-import { debugGroup } from "./commands/debug/debugGroup"
-import { inventoryCommand } from "./commands/inventoryCommand"
-import { hostGroup } from "./commands/host/hostGroup"
 
 import "dotenv/config"
-import { pendingCommand } from "./commands/pendingCommand"
-import { rollCommand } from "./commands/rollCommand"
-import { giftGroup } from "./commands/gift/giftGroup"
 import { petCommand } from "./commands/petCommand"
 
 export const botClient = new Client(process.env.TOKEN!, {
@@ -23,23 +15,14 @@ export const botClient = new Client(process.env.TOKEN!, {
 
 botClient.on("ready", async () => {
 	new CommandHandler(botClient, {
-		commands: [
-			tradeGroup,
-			giftGroup,
-			debugGroup,
-			hostGroup,
-			inventoryCommand,
-			pendingCommand,
-			rollCommand,
-			petCommand,
-		],
+		commands: [petCommand],
 	})
 
 	await botClient.guilds.get(process.env.GUILDID!)?.fetchAllMembers()
-	await game.fetchData().catch(logError())
+	// await game.fetchData().catch(logError())
 
 	botClient.editStatus("online")
-	logInfo("*Ready!*", LogColor.Green)
+	// logInfo("*Ready!*", LogColor.Green)
 })
 
 botClient.on("messageCreate", async (msg) => {
