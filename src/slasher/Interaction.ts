@@ -41,7 +41,8 @@ export class Interaction {
 		const channel =
 			guild.channels.get(data.channel_id) ??
 			(await guild.getRESTChannels()).find((c) => c.id === data.channel_id)
-		if (!channel) throw new Error(`Channel \`${data.channel_id}\` not found`)
+		// if (!channel) throw new Error(`Channel \`${data.channel_id}\` not found`)
+		// Commented out cause threads hella break this
 
 		return new Interaction(
 			data,
